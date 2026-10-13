@@ -2,11 +2,17 @@
   "name": "quiet-on-set",
   "private": true,
   "type": "module",
+  "version": "0.1.0",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "test": "vitest run",
+    "check": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm test"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -14,6 +20,7 @@
     "@fontsource-variable/noto-sans": "^5.3.0",
     "@react-router/node": "^8.4.0",
     "@react-router/serve": "^8.4.0",
+    "@shadcn/react": "^0.3.1",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
     "isbot": "^5.1.36",
@@ -30,8 +37,12 @@
     "@types/node": "^22",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
-    "vite": "^8.0.3"
-  }
+    "vite": "^8.0.3",
+    "vitest": "^5.0.4"
+  },
+  "packageManager": "pnpm@10.33.2"
 }
