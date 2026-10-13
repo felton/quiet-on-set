@@ -2,10 +2,7 @@ import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Quiet on set" },
-    { name: "description", content: "Places, everyone" },
-  ];
+  return [{ title: "Quiet on set" }, { name: "description", content: "Places, everyone" }];
 }
 
 export default function Home() {

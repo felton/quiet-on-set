@@ -45,14 +45,14 @@ Point the agent at the degit command above, then give it the brief for the site.
 
 ## Scripts
 
-| Command          | What it does                                     |
-| ---------------- | ------------------------------------------------ |
-| `pnpm dev`       | Dev server at `http://localhost:5173`            |
-| `pnpm build`     | Production build to `build/`                     |
-| `pnpm start`     | Serve the production build                       |
-| `pnpm fmt`       | Format everything                                |
-| `pnpm check`     | Format check, lint, typecheck and tests          |
-| `pnpm typecheck` | Generate route types and run `tsc`               |
+| Command          | What it does                            |
+| ---------------- | --------------------------------------- |
+| `pnpm dev`       | Dev server at `http://localhost:5173`   |
+| `pnpm build`     | Production build to `build/`            |
+| `pnpm start`     | Serve the production build              |
+| `pnpm fmt`       | Format everything                       |
+| `pnpm check`     | Format check, lint, typecheck and tests |
+| `pnpm typecheck` | Generate route types and run `tsc`      |
 
 ## Making it yours
 

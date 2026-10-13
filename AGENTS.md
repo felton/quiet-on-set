@@ -4,13 +4,13 @@ Vite starter: React Router (framework mode), Tailwind CSS v4, shadcn/ui on **Bas
 
 ## Commands
 
-| Command          | What it does                                             |
-| ---------------- | -------------------------------------------------------- |
-| `pnpm dev`       | Dev server                                               |
-| `pnpm build`     | Production build                                         |
-| `pnpm fmt`       | Format files in place (oxfmt)                            |
-| `pnpm check`     | Format check, lint, typecheck, tests                     |
-| `pnpm typecheck` | Generate route types and run `tsc`                       |
+| Command          | What it does                         |
+| ---------------- | ------------------------------------ |
+| `pnpm dev`       | Dev server                           |
+| `pnpm build`     | Production build                     |
+| `pnpm fmt`       | Format files in place (oxfmt)        |
+| `pnpm check`     | Format check, lint, typecheck, tests |
+| `pnpm typecheck` | Generate route types and run `tsc`   |
 
 **Run `pnpm check` before you consider a task done. It must pass.** CI runs the same command.
 
