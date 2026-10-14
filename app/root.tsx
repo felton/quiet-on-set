@@ -12,6 +12,10 @@ import "./app.css";
 import { themeScript } from "./lib/theme";
 
 export const links: Route.LinksFunction = () => [
+  // BASE_URL keeps these working when the app is served from a subpath (GitHub Pages).
+  // SVG for modern browsers (follows the browser's light/dark setting), .ico as fallback.
+  { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.svg`, type: "image/svg+xml" },
+  { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.ico`, sizes: "32x32" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",

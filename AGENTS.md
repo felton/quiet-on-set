@@ -23,6 +23,10 @@ Vite starter: React Router (framework mode), Tailwind CSS v4, shadcn/ui on **Bas
 - `app/components/image/unsplash-picture.tsx`: responsive Unsplash images
 - `~/` is an alias for `app/`
 
+## Skills
+
+- `.agents/skills/react-router/` is React Router's official agent skill: mode-specific guidance and references. Read its `SKILL.md` before changing routes, loaders/actions, data loading, or SSR/SPA/pre-render settings. This app uses **Framework mode**. (`.claude/skills/react-router` is a symlink to it so Claude Code loads it automatically.)
+
 ## Conventions
 
 **shadcn/ui is the Base UI variant.** Compose custom elements with the `render` prop. Never use `asChild`; it does not exist here.

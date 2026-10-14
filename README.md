@@ -8,10 +8,12 @@ A quiet, ready-to-shoot Vite starter: React Router, shadcn/ui, Tailwind. Places,
 
 - **React Router v8** in framework mode, with server-side rendering and typed routes
 - **Tailwind CSS v4** and **shadcn/ui** on the [Base UI](https://base-ui.com) variant
-- **TypeScript**, plus **oxfmt** for formatting
+- **TypeScript**, with **oxfmt** for formatting and **oxlint** for linting
+- **Vitest** and **Testing Library**, with a working example test for the home route
+- **Dark mode** that follows the OS setting, with a sun/moon toggle in the header. It needs no provider and no extra dependency.
 - **`UnsplashPicture`**, a responsive `<picture>` component that builds art-directed crops for each Tailwind breakpoint from an Unsplash photo ID
 - **GitHub Actions** for CI (check, build, and a clean-copy build), release-please for versioning, and grouped Dependabot updates
-- **`AGENTS.md`**, which gives coding agents the commands, project layout and conventions
+- **`AGENTS.md`**, which gives coding agents the commands, project layout and conventions, plus React Router's official agent skill in `.agents/skills/`
 
 ## Using the template
 
@@ -45,14 +47,38 @@ Point the agent at the degit command above, then give it the brief for the site.
 
 ## Scripts
 
-| Command          | What it does                            |
-| ---------------- | --------------------------------------- |
-| `pnpm dev`       | Dev server at `http://localhost:5173`   |
-| `pnpm build`     | Production build to `build/`            |
-| `pnpm start`     | Serve the production build              |
-| `pnpm fmt`       | Format everything                       |
-| `pnpm check`     | Format check, lint, typecheck and tests |
-| `pnpm typecheck` | Generate route types and run `tsc`      |
+| Command            | What it does                                   |
+| ------------------ | ---------------------------------------------- |
+| `pnpm dev`         | Dev server at `http://localhost:5173`          |
+| `pnpm build`       | Production build to `build/` (Node server)     |
+| `pnpm start`       | Serve the production build                     |
+| `pnpm build:spa`   | Static SPA build to `build/client`, no server  |
+| `pnpm preview:spa` | Serve the SPA build at `http://localhost:4173` |
+| `pnpm fmt`         | Format everything                              |
+| `pnpm test`        | Run the tests once (`pnpm vitest` to watch)    |
+| `pnpm check`       | Format check, lint, typecheck and tests        |
+| `pnpm typecheck`   | Generate route types and run `tsc`             |
+| `pnpm favicon`     | Rebuild `public/favicon.ico` from its SVG      |
+
+## Testing
+
+Tests sit next to the code they cover, as `*.test.ts(x)` files under `app/`. They run in jsdom using [Testing Library](https://testing-library.com/docs/react-testing-library/intro/). `app/routes/home.test.tsx` is the pattern to copy. It renders a route inside `createRoutesStub` because route components use `<Link>`, and `<Link>` needs a router:
+
+```tsx
+const Stub = createRoutesStub([{ path: "/", Component: Home }]);
+render(<Stub initialEntries={["/"]} />);
+expect((await screen.findByRole("heading", { level: 1 })).textContent).toBe("Places, everyone.");
+```
+
+Vitest uses its own config, `vitest.config.ts`, because the React Router Vite plugin doesn't run under Vitest. `vitest.setup.ts` cleans up the DOM between tests.
+
+## Dark mode
+
+The theme is a single `dark` class on `<html>`. No React context or provider is involved.
+
+- `themeScript` in `app/lib/theme.ts` is inlined in `<head>` and runs before first paint, so the page never flashes the wrong theme. Until the visitor picks a theme, it follows the OS setting and updates when the OS setting changes. It also stays in sync across open tabs.
+- `<ThemeToggle />` (`app/components/theme-toggle.tsx`) switches themes and saves the choice to `localStorage`. CSS decides whether the sun or the moon is shown, so the server render always matches the client.
+- To style for dark mode, use `dark:` variants, or the shadcn color tokens in `app/app.css` (`bg-background`, `text-muted-foreground`, etc.), which handle it for you. Call `setTheme("dark" | "light")` or `toggleTheme()` from anywhere.
 
 ## Making it yours
 
@@ -60,10 +86,105 @@ Point the agent at the degit command above, then give it the brief for the site.
 2. Swap the hero image by passing a new `photoId` to `UnsplashPicture`, and update the photographer credit.
 3. Add routes in `app/routes/` and register them in `app/routes.ts`.
 4. Add components with `pnpm dlx shadcn@latest add <component>`.
+5. Replace the favicon. `public/favicon.svg` follows the browser's light/dark setting. `public/favicon.ico` is the fallback for Safari: edit `assets/favicon-tile.svg`, then run `pnpm favicon` to rebuild it (needs `brew install vips` or GraphicsMagick).
+
+## Environment variables
+
+Copy `.env.example` to `.env` to set local values. `.env` is gitignored and left out of Docker images. The React Router CLI loads it for `dev`, `build` and `typegen`.
+
+| Variable | Default | Effect                                                                                                        |
+| -------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| `SPA`    | unset   | `true` builds a static single-page app (`ssr: false`) instead of the Node server build                        |
+| `VITE_*` | —       | Exposed to browser code as `import.meta.env.VITE_*`. They end up in the bundle, so never use them for secrets |
+
+`SPA` can be set three ways: `pnpm build:spa` (one-off), `SPA=true pnpm build` (same thing, by hand), or `SPA=true` in `.env` (every command, including `dev`). With it set in `.env`, plain `pnpm build` also produces the SPA build.
 
 ## Deployment
 
-`pnpm build` writes `build/client` (static assets) and `build/server` (the SSR server). Any host that runs Node can serve them with `pnpm start`, and the included `Dockerfile` packages the same thing for container platforms.
+### Node server (default)
+
+`pnpm build` writes `build/client` (static assets) and `build/server` (the SSR server). Any host that runs Node can serve them with `pnpm start`. The included `Dockerfile` packages the same build for container platforms.
+
+### Static hosting, no server
+
+React Router can also build the app as plain static files: an `index.html`, JS and CSS that any web server can host (GitHub Pages, S3, Netlify, nginx). Routing then happens entirely in the browser. The rest of the app stays the same. There are two variants:
+
+**SPA mode.** One `index.html`, and every route renders in the browser. This works like the classic client-side-routed React Router apps. It's built in, so no config edit is needed:
+
+```bash
+pnpm build:spa     # same as SPA=true pnpm build -> build/client/index.html
+pnpm preview:spa   # serve it locally, with client-side routing fallback
+```
+
+`react-router.config.ts` reads the `SPA` environment variable (see [Environment variables](#environment-variables)) and sets `ssr: !spa`. To make SPA the permanent default, set `ssr: false` there directly.
+
+There's no `index.html` source file in the repo. React Router generates it at build time from the `Layout` in `app/root.tsx`, so the head tags, fonts and dark-mode script are defined once for both modes.
+
+**Pre-rendered.** Each static route is rendered to its own HTML file at build time, which helps SEO and first paint. Routes that aren't pre-rendered fall back to SPA mode.
+
+```ts
+export default {
+  ssr: false,
+  prerender: true, // or a list of paths: ["/", "/about"]
+} satisfies Config;
+```
+
+In both modes, `pnpm build` outputs a deployable `build/client` folder. The trade-offs:
+
+- No server code runs. Route `loader`s run at build time, and only on pre-rendered routes (in SPA mode, only the root route can have one). `action`s aren't allowed at all. To fetch data at runtime, use `clientLoader` / `clientAction`.
+- The host has to send unknown URLs to the SPA entry so that deep links work. That entry is `index.html` in SPA mode. With `prerender`, it's `__spa-fallback.html` whenever `/` itself is pre-rendered. On Netlify this is a one-line `_redirects` file: `/*  /index.html  200`.
+- Preview a static build with `pnpm preview:spa`, which is a plain static file server like your host will be. `pnpm start` will also run it, through the Node server, but that isn't how it gets served in production.
+
+> The other route to a static app is React Router's _library mode_: a plain Vite app with `createBrowserRouter`, without the React Router Vite plugin. It's a different project structure, not a config change, so for this template use one of the settings above.
+
+### GitHub Pages
+
+GitHub Pages serves a project site from a subpath (`https://<user>.github.io/<repo>/`) and has no rewrite rules. That takes three changes on top of SPA mode:
+
+1. **Subpath.** Set `ssr: false` and add `basename: "/<repo>/"` to `react-router.config.ts` and `base: "/<repo>/"` to `vite.config.ts`. Both are needed: the basename sets the route paths, and `base` sets the asset URLs.
+2. **Deep links.** Pages serves `404.html` for any URL it can't find. Copying `index.html` there makes refreshes and shared links work. (Pages still reports those responses with a 404 status code. That's fine for a personal site, but if search ranking matters, use a host with proper rewrites.)
+3. **Deploy workflow.** Add `.github/workflows/pages.yml` and set **Settings → Pages → Source** to "GitHub Actions":
+
+```yaml
+name: Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: cp build/client/index.html build/client/404.html
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: build/client
+      - id: deployment
+        uses: actions/deploy-pages@v5
+```
+
+Use SPA mode (without `prerender`) for GitHub Pages. With a `basename`, pre-rendered pages are written to a nested `<repo>/` folder that doesn't line up with how Pages serves the site.
 
 ## Versioning
 
