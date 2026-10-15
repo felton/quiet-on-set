@@ -10,7 +10,7 @@ A quiet, ready-to-shoot Vite starter: React Router, shadcn/ui, Tailwind. Places,
 - **Tailwind CSS v4** and **shadcn/ui** on the [Base UI](https://base-ui.com) variant
 - **TypeScript**, with **oxfmt** for formatting and **oxlint** for linting
 - **Vitest** and **Testing Library**, with a working example test for the home route
-- **Dark mode** that follows the OS setting, with a sun/moon toggle in the header. It needs no provider and no extra dependency.
+- **Dark mode** with a Light / Dark / System menu in the header. It follows the OS setting by default and needs no provider or extra dependency.
 - **`UnsplashPicture`**, a responsive `<picture>` component that builds art-directed crops for each Tailwind breakpoint from an Unsplash photo ID
 - **GitHub Actions** for CI (check, build, and a clean-copy build), release-please for versioning, and grouped Dependabot updates
 - **`AGENTS.md`**, which gives coding agents the commands, project layout and conventions, plus React Router's official agent skill in `.agents/skills/`
@@ -76,9 +76,11 @@ Vitest uses its own config, `vitest.config.ts`, because the React Router Vite pl
 
 The theme is a single `dark` class on `<html>`. No React context or provider is involved.
 
-- `themeScript` in `app/lib/theme.ts` is inlined in `<head>` and runs before first paint, so the page never flashes the wrong theme. Until the visitor picks a theme, it follows the OS setting and updates when the OS setting changes. It also stays in sync across open tabs.
-- `<ThemeToggle />` (`app/components/theme-toggle.tsx`) switches themes and saves the choice to `localStorage`. CSS decides whether the sun or the moon is shown, so the server render always matches the client.
-- To style for dark mode, use `dark:` variants, or the shadcn color tokens in `app/app.css` (`bg-background`, `text-muted-foreground`, etc.), which handle it for you. Call `setTheme("dark" | "light")` or `toggleTheme()` from anywhere.
+- `themeScript` in `app/lib/theme.ts` is inlined in `<head>` and runs before first paint, so the page never flashes the wrong theme. With System selected (the default), it follows the OS setting and updates when the OS setting changes. It also stays in sync across open tabs.
+- `<ThemeToggle />` (`app/components/theme-toggle.tsx`) is a Light / Dark / System menu. The button shows a sun or a moon for whichever theme is currently showing, so with System selected it follows the OS. CSS picks the icon, so the server render always matches the client.
+- Light and Dark are saved to `localStorage`. System is the default and clears the saved value, so the page goes back to following the OS.
+- The menu is shadcn's `dropdown-menu` (`app/components/ui/dropdown-menu.tsx`). Its radio items set `closeOnClick`, because Base UI keeps a menu open after a radio pick by default.
+- To style for dark mode, use `dark:` variants, or the shadcn color tokens in `app/app.css` (`bg-background`, `text-muted-foreground`, etc.), which handle it for you. Call `setTheme("light" | "dark" | "system")` or `toggleTheme()` from anywhere.
 
 ## Making it yours
 

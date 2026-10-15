@@ -38,7 +38,7 @@ Vite starter: React Router (framework mode), Tailwind CSS v4, shadcn/ui on **Bas
 - Add components with `pnpm dlx shadcn@latest add <name>`.
 - Route modules type their loaders, actions and meta with `import type { Route } from "./+types/<file>"`. If the import is missing, run `pnpm typecheck` to generate it.
 - Use Tailwind theme tokens (`bg-background`, `text-muted-foreground`, `border`, `bg-muted`) instead of raw palette colors. They handle dark mode, so color `dark:` variants are rarely needed.
-- Dark mode is the `dark` class on `<html>`, set before paint by `themeScript` in `app/lib/theme.ts`. There is no theme provider or React state: style with `dark:` variants, and switch with `setTheme()` / `toggleTheme()` (`<ThemeToggle />` is in the header).
+- Dark mode is the `dark` class on `<html>`, set before paint by `themeScript` in `app/lib/theme.ts`. There is no theme provider or React state: style with `dark:` variants, and switch with `setTheme("light" | "dark" | "system")`. `<ThemeToggle />` in the header is a Light / Dark / System menu.
 - Images from Unsplash use `UnsplashPicture`. Pass the `photoId` path segment from the URL. Set `breakpoints` so the largest `width` matches the largest size the image actually renders. Use `priority` only for above-the-fold images. Credit the photographer in a caption.
 
 ## Commits and releases
