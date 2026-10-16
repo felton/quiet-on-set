@@ -22,7 +22,7 @@ A quiet, ready-to-shoot Vite starter: React Router, shadcn/ui, Tailwind. Places,
 <!-- x-release-please-start-version -->
 
 ```bash
-npx degit felton/quiet-on-set#v0.1.0 my-app
+npx degit felton/quiet-on-set#v1.0.0 my-app
 cd my-app
 pnpm install
 pnpm dev
