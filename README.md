@@ -19,12 +19,16 @@ A quiet, ready-to-shoot Vite starter: React Router, shadcn/ui, Tailwind. Places,
 
 ### Pin a release (recommended)
 
+<!-- x-release-please-start-version -->
+
 ```bash
 npx degit felton/quiet-on-set#v0.1.0 my-app
 cd my-app
 pnpm install
 pnpm dev
 ```
+
+<!-- x-release-please-end -->
 
 This copies the files from that release with no git history, so your project starts with a clean repo. The available versions are listed on the [Releases](../../releases) page. Leave off `#v…` to get the latest `main`.
 
@@ -191,7 +195,7 @@ Use SPA mode (without `prerender`) for GitHub Pages. With a `basename`, pre-rend
 
 ## Versioning
 
-Releases are automated with [release-please](https://github.com/googleapis/release-please). Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`…). On each push to `main`, release-please opens or updates a release PR. Merging that PR bumps the version, updates `CHANGELOG.md`, tags `vX.Y.Z` and publishes a GitHub Release. Only `feat:` and `fix:` commits (or a `!` breaking change) trigger a release, so squash-merge PRs with a conventional title.
+Releases are automated with [release-please](https://github.com/googleapis/release-please). Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`…). On each push to `main`, release-please opens or updates a release PR. Merging that PR bumps the version (in `package.json` and in this README's degit command), updates `CHANGELOG.md`, tags `vX.Y.Z` and publishes a GitHub Release. Settings are in `release-please-config.json`; `.release-please-manifest.json` records the last released version and is updated by the release PR. Only `feat:` and `fix:` commits (or a `!` breaking change) trigger a release, so squash-merge PRs with a conventional title.
 
 The workflow uses the built-in `GITHUB_TOKEN`; no secret is needed. Each repo does need one setting turned on: **Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests"**.
 

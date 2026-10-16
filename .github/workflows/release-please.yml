@@ -1,8 +1,9 @@
 name: Release
 
 # On every push to main, release-please keeps a "chore(main): release x.y.z"
-# PR up to date from Conventional Commits. Merging that PR bumps
-# package.json, updates CHANGELOG.md, tags vX.Y.Z and creates a GitHub Release.
+# PR up to date from Conventional Commits. Merging that PR bumps package.json
+# and the version in README.md, updates CHANGELOG.md, tags vX.Y.Z and creates
+# a GitHub Release.
 
 on:
   push:
@@ -19,7 +20,11 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v5
         with:
-          release-type: node
+          # Settings live in release-please-config.json (release type, plus
+          # README.md as an extra file so its pinned degit version is bumped).
+          # .release-please-manifest.json tracks the last released version.
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
           # PRs opened with the default GITHUB_TOKEN don't trigger other
           # workflows, so CI won't run on the release PR. To fix that, add a
           # fine-grained PAT (contents + pull requests: read/write) as a repo
