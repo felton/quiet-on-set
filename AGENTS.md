@@ -2,6 +2,8 @@
 
 Vite starter: React Router (framework mode), Tailwind CSS v4, shadcn/ui on **Base UI**, TypeScript. Package manager: **pnpm**.
 
+Template docs (for reference, not part of this project): https://felton.github.io/quiet-on-set/
+
 ## Commands
 
 | Command          | What it does                         |

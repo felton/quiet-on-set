@@ -2,6 +2,7 @@
   "name": "quiet-on-set",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://felton.github.io/quiet-on-set/",
   "type": "module",
   "scripts": {
     "build": "react-router build",
