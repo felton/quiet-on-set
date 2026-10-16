@@ -13,7 +13,7 @@ A quiet, ready-to-shoot Vite starter: React Router, shadcn/ui, Tailwind. Places,
 - **Dark mode** with a Light / Dark / System menu in the header. It follows the OS setting by default and needs no provider or extra dependency.
 - **`UnsplashPicture`**, a responsive `<picture>` component that builds art-directed crops for each Tailwind breakpoint from an Unsplash photo ID
 - **GitHub Actions** for CI (check, build, and a clean-copy build), release-please for versioning, and grouped Dependabot updates
-- **`AGENTS.md`**, which gives coding agents the commands, project layout and conventions, plus React Router's official agent skill in `.agents/skills/`
+- **`AGENTS.md`**, which gives coding agents the commands, project layout and conventions, plus the official React Router and shadcn/ui agent skills in `.agents/skills/`
 
 ## Using the template
 
@@ -85,10 +85,11 @@ The theme is a single `dark` class on `<html>`. No React context or provider is 
 ## Making it yours
 
 1. Rename the project in `package.json` and update the brand in `app/welcome/welcome.tsx`.
-2. Swap the hero image by passing a new `photoId` to `UnsplashPicture`, and update the photographer credit.
-3. Add routes in `app/routes/` and register them in `app/routes.ts`.
-4. Add components with `pnpm dlx shadcn@latest add <component>`.
-5. Replace the favicon. `public/favicon.svg` follows the browser's light/dark setting. `public/favicon.ico` is the fallback for Safari: edit `assets/favicon-tile.svg`, then run `pnpm favicon` to rebuild it (needs `brew install vips` or GraphicsMagick).
+2. Reset versioning. The copy carries over the template's `version` in `package.json` and its `CHANGELOG.md`, but none of its tags. Set `version` to your starting point (for example `0.1.0`) and delete `CHANGELOG.md`, so your first release starts clean. See [Versioning](#versioning).
+3. Swap the hero image by passing a new `photoId` to `UnsplashPicture`, and update the photographer credit.
+4. Add routes in `app/routes/` and register them in `app/routes.ts`.
+5. Add components with `pnpm dlx shadcn@latest add <component>`.
+6. Replace the favicon. `public/favicon.svg` follows the browser's light/dark setting. `public/favicon.ico` is the fallback for Safari: edit `assets/favicon-tile.svg`, then run `pnpm favicon` to rebuild it (needs `brew install vips` or GraphicsMagick).
 
 ## Environment variables
 
@@ -190,7 +191,11 @@ Use SPA mode (without `prerender`) for GitHub Pages. With a `basename`, pre-rend
 
 ## Versioning
 
-Releases are automated with [release-please](https://github.com/googleapis/release-please). Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`…). Merging the release PR bumps the version, updates `CHANGELOG.md`, and tags `vX.Y.Z`.
+Releases are automated with [release-please](https://github.com/googleapis/release-please). Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`…). On each push to `main`, release-please opens or updates a release PR. Merging that PR bumps the version, updates `CHANGELOG.md`, tags `vX.Y.Z` and publishes a GitHub Release. Only `feat:` and `fix:` commits (or a `!` breaking change) trigger a release, so squash-merge PRs with a conventional title.
+
+The workflow uses the built-in `GITHUB_TOKEN`; no secret is needed. Each repo does need one setting turned on: **Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests"**.
+
+**In a project made from this template,** the same workflow versions *your* project. A copy made with degit or **Use this template** starts with no tags and no release history from the template, so do step 2 of [Making it yours](#making-it-yours) and turn on the setting above in the new repo. If you don't want automated releases, delete `.github/workflows/release-please.yml`.
 
 ---
 

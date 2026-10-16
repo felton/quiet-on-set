@@ -25,7 +25,9 @@ Vite starter: React Router (framework mode), Tailwind CSS v4, shadcn/ui on **Bas
 
 ## Skills
 
-- `.agents/skills/react-router/` is React Router's official agent skill: mode-specific guidance and references. Read its `SKILL.md` before changing routes, loaders/actions, data loading, or SSR/SPA/pre-render settings. This app uses **Framework mode**. (`.claude/skills/react-router` is a symlink to it so Claude Code loads it automatically.)
+- `.agents/skills/react-router/` is React Router's official agent skill: mode-specific guidance and references. Read its `SKILL.md` before changing routes, loaders/actions, data loading, or SSR/SPA/pre-render settings. This app uses **Framework mode**.
+- `.agents/skills/shadcn/` is shadcn/ui's official agent skill. Read its `SKILL.md` before adding, composing or restyling components. This project uses the **Base UI** variant (`base-lyra` style in `components.json`).
+- Both are symlinked into `.claude/skills/` so Claude Code loads them automatically.
 
 ## Conventions
 
@@ -44,4 +46,4 @@ Vite starter: React Router (framework mode), Tailwind CSS v4, shadcn/ui on **Bas
 ## Commits and releases
 
 - Use [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`. release-please derives versions and the changelog from them.
-- Do not edit `CHANGELOG.md` or the `version` in `package.json` by hand.
+- Do not edit `CHANGELOG.md` or the `version` in `package.json` by hand. The one exception is setting up a new project from this template: reset `version` and delete the template's `CHANGELOG.md` (README, "Making it yours").
