@@ -1,0 +1,111 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+
+Routing is React Router v8 in **framework mode**: you list routes in one config file, each route is a module in `app/routes/`, and the Vite plugin generates types for each one.
+
+## The route config
+
+Every route is registered in `app/routes.ts`. The template starts with one:
+
+```ts
+import { type RouteConfig, index } from "@react-router/dev/routes";
+
+export default [index("routes/home.tsx")] satisfies RouteConfig;
+```
+
+There's no file-system routing: a file in `app/routes/` does nothing until it's listed here.
+
+## Adding a page
+
+1. Create the module, for example `app/routes/about.tsx`:
+
+   ```tsx
+   import type { Route } from "./+types/about";
+
+   export function meta(_args: Route.MetaArgs) {
+     return [{ title: "About" }];
+   }
+
+   export default function About() {
+     return <h1>About</h1>;
+   }
+   ```
+
+2. Register it in `app/routes.ts`:
+
+   ```ts
+   import { type RouteConfig, index, route } from "@react-router/dev/routes";
+
+   export default [
+     index("routes/home.tsx"),
+     route("about", "routes/about.tsx"),
+   ] satisfies RouteConfig;
+   ```
+
+3. Link to it with `<Link to="/about">`. shadcn components that render links take a `render` prop rather than `asChild`:
+
+   ```tsx
+   <NavigationMenuLink render={<Link to="/about" />}>About</NavigationMenuLink>
+   ```
+
+The `./+types/about` import is generated. If your editor can't find it, run `pnpm typecheck`, which runs `react-router typegen` first.
+
+## Layouts
+
+A layout route renders shared UI around its children through `<Outlet />`, without adding a URL segment. This site's docs pages work this way:
+
+```ts
+layout("routes/docs/layout.tsx", [
+  route("docs/call-sheet", "routes/docs/call-sheet.tsx"),
+  route("docs/blocking", "routes/docs/blocking.tsx"),
+]);
+```
+
+`app/root.tsx` is the outermost layout. It holds the document shell (`<Meta />`, `<Links />`, the dark-mode script) and the app-wide error boundary.
+
+## Rendering modes
+
+The same app builds three ways. Only `react-router.config.ts` changes.
+
+<div className="mt-4 grid gap-4 sm:grid-cols-3">
+  <Card>
+    <CardHeader>
+      <CardTitle>Server rendering</CardTitle>
+      <CardDescription>
+        The default. `pnpm build`, then `pnpm start` on any Node host. Loaders and actions run per
+        request.
+      </CardDescription>
+    </CardHeader>
+  </Card>
+  <Card>
+    <CardHeader>
+      <CardTitle>SPA</CardTitle>
+      <CardDescription>
+        `pnpm build:spa`. One `index.html`, routing in the browser. Use `clientLoader` for data.
+      </CardDescription>
+    </CardHeader>
+  </Card>
+  <Card>
+    <CardHeader>
+      <CardTitle>Pre-rendered</CardTitle>
+      <CardDescription>
+        `ssr: false` plus `prerender`. An HTML file per route, made at build time. This site works
+        this way.
+      </CardDescription>
+    </CardHeader>
+  </Card>
+</div>
+
+### Pre-rendering
+
+```ts
+import type { Config } from "@react-router/dev/config";
+
+export default {
+  ssr: false,
+  prerender: true, // every static path in routes.ts, or a list: ["/", "/about"]
+} satisfies Config;
+```
+
+Loaders on pre-rendered routes run once, at build time, and their data is written next to the HTML. This site's [Props](/docs/props) page uses that to syntax-highlight component source without sending a highlighter to the browser. Actions aren't allowed without a server.
+
+Deploying a pre-rendered build under a subpath, such as a GitHub Pages project site, takes one extra step. [Wrap](/docs/wrap#github-pages) covers it.
