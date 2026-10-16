@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/felton/quiet-on-set/compare/v1.0.0...v1.0.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **deps:** bump the ui group with 2 updates ([#3](https://github.com/felton/quiet-on-set/issues/3)) ([7fd5602](https://github.com/felton/quiet-on-set/commit/7fd5602ebfcf35e8fa2e1c3b3fdc395881175e33))
+
 ## 1.0.0 (2026-10-16)
 
 
