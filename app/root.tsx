@@ -9,6 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import "./docs.css";
 import { themeScript } from "./lib/theme";
 
 export const links: Route.LinksFunction = () => [

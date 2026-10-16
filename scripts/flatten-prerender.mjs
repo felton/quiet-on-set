@@ -15,10 +15,14 @@ try {
   process.exit(1);
 }
 
-// React Router renames the SPA fallback to build/client/index.html because no
-// page exists there yet. Keep it as 404.html (Pages serves that for unknown URLs;
-// it hydrates and shows the root ErrorBoundary), then move the pages up.
-await rename(path.join(client, "index.html"), path.join(client, "404.html"));
+// React Router renames its SPA fallback to build/client/index.html because no
+// page exists there yet. The real home page replaces it.
+await rm(path.join(client, "index.html"));
 await cp(nested, client, { recursive: true });
 await rm(nested, { recursive: true });
+
+// Pages serves 404.html for unknown URLs. /404 is pre-rendered from the
+// catch-all route, which matches any unknown URL, so it hydrates cleanly.
+await rename(path.join(client, "404", "index.html"), path.join(client, "404.html"));
+await rm(path.join(client, "404"), { recursive: true });
 console.log("flatten-prerender: moved pages into build/client and wrote 404.html");

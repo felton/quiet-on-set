@@ -1,0 +1,95 @@
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+
+quiet-on-set is a starting point for new web projects: React Router in framework mode, Tailwind CSS v4 and shadcn/ui on Base UI, with formatting, linting, tests and CI already set up. You copy it, rename it, and start on the actual site.
+
+## Scaffold a project
+
+Copy a pinned release with [degit](https://github.com/Rich-Harris/degit). It takes the files from that release without any git history, so your project starts with a clean repo.
+
+<Tabs defaultValue="npm" className="mt-4">
+  <TabsList>
+    <TabsTrigger value="npm">npm</TabsTrigger>
+    <TabsTrigger value="pnpm">pnpm</TabsTrigger>
+    <TabsTrigger value="bun">bun</TabsTrigger>
+  </TabsList>
+  <TabsContent value="npm">
+
+```bash
+npx degit felton/quiet-on-set#v1.0.0 my-app
+```
+
+  </TabsContent>
+  <TabsContent value="pnpm">
+
+```bash
+pnpm dlx degit felton/quiet-on-set#v1.0.0 my-app
+```
+
+  </TabsContent>
+  <TabsContent value="bun">
+
+```bash
+bunx degit felton/quiet-on-set#v1.0.0 my-app
+```
+
+  </TabsContent>
+</Tabs>
+
+Leave off `#v1.0.0` to get the latest `main`. Every version is listed on the [Releases](https://github.com/felton/quiet-on-set/releases) page.
+
+You can also click **Use this template** on GitHub, or do the same from the command line. Both copy the current `main`:
+
+```bash
+gh repo create my-app --template felton/quiet-on-set --private --clone
+```
+
+## Install and run
+
+```bash
+cd my-app
+pnpm install
+pnpm dev
+```
+
+The dev server runs at `http://localhost:5173`.
+
+<Alert>
+  <AlertTitle>The project uses pnpm</AlertTitle>
+  <AlertDescription>
+    Whichever tool ran degit, install with pnpm. The version is pinned in the `packageManager` field
+    of `package.json`, and CI installs from `pnpm-lock.yaml`. If you don't have pnpm, `corepack
+    enable` sets it up.
+  </AlertDescription>
+</Alert>
+
+## Scripts
+
+| Command            | What it does                                   |
+| ------------------ | ---------------------------------------------- |
+| `pnpm dev`         | Dev server at `http://localhost:5173`          |
+| `pnpm build`       | Production build to `build/` (Node server)     |
+| `pnpm start`       | Serve the production build                     |
+| `pnpm build:spa`   | Static SPA build to `build/client`, no server  |
+| `pnpm preview:spa` | Serve the SPA build at `http://localhost:4173` |
+| `pnpm fmt`         | Format everything                              |
+| `pnpm test`        | Run the tests once (`pnpm vitest` to watch)    |
+| `pnpm check`       | Format check, lint, typecheck and tests        |
+| `pnpm typecheck`   | Generate route types and run `tsc`             |
+| `pnpm favicon`     | Rebuild `public/favicon.ico` from its SVG      |
+
+`pnpm check` is the same command CI runs. Run it before calling anything done.
+
+## Make it yours
+
+1. Rename the project in `package.json` and update the brand in `app/welcome/welcome.tsx`.
+2. Reset versioning: set `version` in `package.json` to your starting point (for example `0.1.0`) and delete `CHANGELOG.md`. Your copy has none of the template's tags, so release-please starts fresh.
+3. Swap the hero image ([Wardrobe](/docs/wardrobe) has the details).
+4. Add routes and components ([Blocking](/docs/blocking) and [Props](/docs/props)).
+5. Replace the favicon. Edit `assets/favicon-tile.svg`, then run `pnpm favicon`.
+
+To use release-please in the new repo, turn on **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests**. If you don't want automated releases, delete `.github/workflows/release-please.yml`.
+
+## With a coding agent
+
+Give the agent the degit command and a brief for the site. `AGENTS.md` (which `CLAUDE.md` imports) tells it the commands, the layout and the conventions, and `.agents/skills/` has the official React Router and shadcn/ui skills. [Wrap](/docs/wrap#working-with-agents) has more.

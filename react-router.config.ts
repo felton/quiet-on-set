@@ -5,6 +5,9 @@ import type { Config } from "@react-router/dev/config";
 // moves them up next to the assets after the build.
 export default {
   ssr: false,
-  prerender: true,
+  // Every static path, plus /404: it matches the catch-all route and becomes 404.html.
+  async prerender({ getStaticPaths }) {
+    return [...getStaticPaths(), "/404"];
+  },
   basename: "/quiet-on-set/",
 } satisfies Config;

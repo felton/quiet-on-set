@@ -1,4 +1,16 @@
-# quiet-on-set
+# quiet-on-set docs
+
+**This is the `docs` branch: the docs site, not the template.** It's a quiet-on-set project, pre-rendered and deployed to GitHub Pages at https://felton.github.io/quiet-on-set/ by `.github/workflows/docs.yml`. Template changes belong on `main`.
+
+## Docs-site rules
+
+- `app/components/ui/` is vendored from the template release in `TEMPLATE_VERSION`. Don't edit the template's components here: change them on `main`, release, bump `TEMPLATE_VERSION`, run `pnpm sync:template`. Components added only for the docs are listed in `docs_only` in `scripts/sync-template.sh`; add new ones there.
+- Page bodies are MDX in `app/content/`. `app/content/nav.ts` is the page list (sidebar, prev/next, edit links); add a page there and in `app/routes.ts`.
+- The site is served under `/quiet-on-set/`. Link with `<Link>` (or root-relative Markdown links, which MDX maps to `<Link>`), never a hard-coded `href="/..."`.
+- `pnpm build` runs `scripts/flatten-prerender.mjs` after React Router: it moves pages out of `build/client/quiet-on-set/` and writes `404.html`.
+- No actions or runtime loaders: loaders run once at build time.
+
+The template's own notes follow.
 
 Vite starter: React Router (framework mode), Tailwind CSS v4, shadcn/ui on **Base UI**, TypeScript. Package manager: **pnpm**.
 

@@ -1,13 +1,13 @@
+import { mdxComponents } from "~/components/docs/mdx-components";
+import Content from "~/content/call-sheet.mdx";
+import { docMeta } from "~/content/nav";
+
 import type { Route } from "./+types/call-sheet";
 
 export function meta(_args: Route.MetaArgs) {
-  return [{ title: "Call Sheet: Getting started · quiet on set" }];
+  return docMeta("call-sheet");
 }
 
 export default function CallSheet() {
-  return (
-    <main className="container mx-auto p-4 pt-16">
-      <h1>Call Sheet</h1>
-    </main>
-  );
+  return <Content components={mdxComponents} />;
 }
