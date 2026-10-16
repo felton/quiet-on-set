@@ -1,12 +1,21 @@
 {
   "name": "quiet-on-set",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "react-router build",
+    "build:spa": "SPA=true react-router build",
     "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "start": "grep -qs '\"isSpaMode\":true' build/client/index.html && echo 'Note: this is an SPA build. It runs here, but deploy build/client to a static host, and preview it with pnpm preview:spa.' >&2; react-router-serve ./build/server/index.js",
+    "preview:spa": "pnpm dlx sirv-cli build/client --single --port 4173",
+    "typecheck": "react-router typegen && tsc",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "test": "vitest run",
+    "check": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm test",
+    "favicon": "sh scripts/favicon.sh"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -14,6 +23,7 @@
     "@fontsource-variable/noto-sans": "^5.3.0",
     "@react-router/node": "^8.4.0",
     "@react-router/serve": "^8.4.0",
+    "@shadcn/react": "^0.3.1",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
     "isbot": "^5.1.36",
@@ -27,11 +37,18 @@
   "devDependencies": {
     "@react-router/dev": "^8.4.0",
     "@tailwindcss/vite": "^4.2.2",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
     "@types/node": "^22",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "jsdom": "^30.1.2",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
-    "vite": "^8.0.3"
-  }
+    "vite": "^8.0.3",
+    "vitest": "^5.0.4"
+  },
+  "packageManager": "pnpm@10.33.2"
 }
