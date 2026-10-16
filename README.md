@@ -1,6 +1,10 @@
 # quiet on set
 
+[![Docs](https://img.shields.io/badge/docs-live-4f46e5)](https://felton.github.io/quiet-on-set/)
+
 A quiet, ready-to-shoot Vite starter: React Router, shadcn/ui, Tailwind. Places, everyone.
+
+**Docs and live demo: [felton.github.io/quiet-on-set](https://felton.github.io/quiet-on-set/)**. The docs site is itself built with this template.
 
 `quiet-on-set` is a starting point for new web projects. The setup work is already done (routing, styling, components, formatting, CI), so you or a coding agent can start building the actual site straight away.
 
@@ -14,6 +18,14 @@ A quiet, ready-to-shoot Vite starter: React Router, shadcn/ui, Tailwind. Places,
 - **`UnsplashPicture`**, a responsive `<picture>` component that builds art-directed crops for each Tailwind breakpoint from an Unsplash photo ID
 - **GitHub Actions** for CI (check, build, and a clean-copy build), release-please for versioning, and grouped Dependabot updates
 - **`AGENTS.md`**, which gives coding agents the commands, project layout and conventions, plus the official React Router and shadcn/ui agent skills in `.agents/skills/`
+
+Every shipped component is shown live, with its source, on [Props](https://felton.github.io/quiet-on-set/docs/props/).
+
+## Good for, not for
+
+**Good for:** marketing sites, docs, dashboards and small apps where you want React Router's routing and data loading, a component kit you own as source, and a choice of server-rendered, SPA or pre-rendered builds. It's also a good brief for a coding agent, because the conventions are written down.
+
+**Not for:** projects that need a different framework (Next.js, Astro), the Radix flavor of shadcn/ui (this uses Base UI and its `render` prop), or a package manager other than pnpm without some changes.
 
 ## Using the template
 
@@ -49,6 +61,8 @@ Point the agent at the degit command above, then give it the brief for the site.
 - how to use `UnsplashPicture`
 - to run `pnpm check` before it calls the work done
 
+More in the docs: [Call Sheet](https://felton.github.io/quiet-on-set/docs/call-sheet/) (getting started) and [Working with agents](https://felton.github.io/quiet-on-set/docs/wrap/#working-with-agents).
+
 ## Scripts
 
 | Command            | What it does                                   |
@@ -63,6 +77,23 @@ Point the agent at the degit command above, then give it the brief for the site.
 | `pnpm check`       | Format check, lint, typecheck and tests        |
 | `pnpm typecheck`   | Generate route types and run `tsc`             |
 | `pnpm favicon`     | Rebuild `public/favicon.ico` from its SVG      |
+
+## Project structure
+
+```
+app/
+├─ root.tsx                 # document shell, <Meta>/<Links>, error boundary
+├─ routes.ts                # route config: register every route here
+├─ routes/                  # route modules (home.tsx and its test)
+├─ components/ui/           # shadcn/ui components (add with the CLI)
+├─ components/image/        # UnsplashPicture
+├─ components/theme-toggle.tsx
+├─ lib/theme.ts             # themeScript, setTheme, toggleTheme
+├─ welcome/                 # the placeholder home page: replace it
+└─ app.css                  # Tailwind, theme tokens, fonts
+```
+
+`~/` is an alias for `app/`. [Blocking](https://felton.github.io/quiet-on-set/docs/blocking/) covers routes, layouts and rendering modes.
 
 ## Testing
 
@@ -85,6 +116,8 @@ The theme is a single `dark` class on `<html>`. No React context or provider is 
 - Light and Dark are saved to `localStorage`. System is the default and clears the saved value, so the page goes back to following the OS.
 - The menu is shadcn's `dropdown-menu` (`app/components/ui/dropdown-menu.tsx`). Its radio items set `closeOnClick`, because Base UI keeps a menu open after a radio pick by default.
 - To style for dark mode, use `dark:` variants, or the shadcn color tokens in `app/app.css` (`bg-background`, `text-muted-foreground`, etc.), which handle it for you. Call `setTheme("light" | "dark" | "system")` or `toggleTheme()` from anywhere.
+
+[Wardrobe](https://felton.github.io/quiet-on-set/docs/wardrobe/) covers theme tokens, fonts and the hero image.
 
 ## Making it yours
 
@@ -191,7 +224,7 @@ jobs:
         uses: actions/deploy-pages@v5
 ```
 
-Use SPA mode (without `prerender`) for GitHub Pages. With a `basename`, pre-rendered pages are written to a nested `<repo>/` folder that doesn't line up with how Pages serves the site.
+This SPA setup is the simplest. Pre-rendering also works on Pages, but with a `basename` React Router writes the pages to a nested `<repo>/` folder, so it takes a small post-build step to move them. The docs site is deployed that way; [Wrap](https://felton.github.io/quiet-on-set/docs/wrap/#github-pages) has the full setup.
 
 ## Versioning
 
