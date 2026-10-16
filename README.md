@@ -195,7 +195,7 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 
 The workflow uses the built-in `GITHUB_TOKEN`; no secret is needed. Each repo does need one setting turned on: **Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests"**.
 
-**In a project made from this template,** the same workflow versions *your* project. A copy made with degit or **Use this template** starts with no tags and no release history from the template, so do step 2 of [Making it yours](#making-it-yours) and turn on the setting above in the new repo. If you don't want automated releases, delete `.github/workflows/release-please.yml`.
+**In a project made from this template,** the same workflow versions _your_ project. A copy made with degit or **Use this template** starts with no tags and no release history from the template, so do step 2 of [Making it yours](#making-it-yours) and turn on the setting above in the new repo. If you don't want automated releases, delete `.github/workflows/release-please.yml`.
 
 ---
 
