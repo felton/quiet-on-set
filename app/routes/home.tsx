@@ -1,10 +1,16 @@
+import { Link } from "react-router";
+
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
 
 export function meta(_args: Route.MetaArgs) {
   return [{ title: "Quiet on set" }, { name: "description", content: "Places, everyone" }];
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+    <main className="container mx-auto p-4 pt-16">
+      <h1>Places, everyone.</h1>
+      <Link to="/docs/call-sheet">Call Sheet</Link>
+    </main>
+  );
 }

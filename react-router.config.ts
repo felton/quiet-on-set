@@ -1,9 +1,10 @@
 import type { Config } from "@react-router/dev/config";
 
-// Server-rendered by default. `pnpm build:spa` sets SPA=true to build a static
-// single-page app instead: build/client/index.html, no Node server needed.
-const spa = process.env.SPA === "true";
-
+// Static, pre-rendered build for GitHub Pages, served under /quiet-on-set/.
+// Pre-rendered pages land in build/client/quiet-on-set/; scripts/flatten-prerender.mjs
+// moves them up next to the assets after the build.
 export default {
-  ssr: !spa,
+  ssr: false,
+  prerender: true,
+  basename: "/quiet-on-set/",
 } satisfies Config;

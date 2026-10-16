@@ -4,11 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
-    "build:spa": "SPA=true react-router build",
+    "build": "react-router build && node scripts/flatten-prerender.mjs",
     "dev": "react-router dev",
-    "start": "grep -qs '\"isSpaMode\":true' build/client/index.html && echo 'Note: this is an SPA build. It runs here, but deploy build/client to a static host, and preview it with pnpm preview:spa.' >&2; react-router-serve ./build/server/index.js",
-    "preview:spa": "pnpm dlx sirv-cli build/client --single --port 4173",
     "typecheck": "react-router typegen && tsc",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
