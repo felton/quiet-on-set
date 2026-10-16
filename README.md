@@ -20,7 +20,7 @@ A quiet, ready-to-shoot Vite starter: React Router, shadcn/ui, Tailwind. Places,
 ### Pin a release (recommended)
 
 ```bash
-npx degit <owner>/quiet-on-set#v0.1.0 my-app
+npx degit felton/quiet-on-set#v0.1.0 my-app
 cd my-app
 pnpm install
 pnpm dev
@@ -33,7 +33,7 @@ This copies the files from that release with no git history, so your project sta
 Clicking **Use this template** creates a new repo from the current `main`. You can also do this from the command line:
 
 ```bash
-gh repo create my-app --template <owner>/quiet-on-set --private --clone
+gh repo create my-app --template felton/quiet-on-set --private --clone
 ```
 
 ### With a coding agent
