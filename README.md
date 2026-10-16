@@ -34,7 +34,7 @@ Every shipped component is shown live, with its source, on [Props](https://felto
 <!-- x-release-please-start-version -->
 
 ```bash
-npx degit felton/quiet-on-set#v1.0.0 my-app
+npx degit felton/quiet-on-set#v1.0.1 my-app
 cd my-app
 pnpm install
 pnpm dev
