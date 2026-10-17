@@ -5,8 +5,31 @@ import tailwindcss from "@tailwindcss/vite";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
+
+const templateVersion = readFileSync("TEMPLATE_VERSION", "utf8").trim();
+
+type MdNode = { type: string; value?: string; url?: string; children?: MdNode[] };
+
+/**
+ * Replaces __TEMPLATE_VERSION__ in MDX text, inline code, code blocks and link
+ * URLs with the version in TEMPLATE_VERSION, so pages never hard-code a release.
+ * (MDX `{expressions}` don't work inside code blocks.)
+ */
+function remarkTemplateVersion() {
+  const replace = (node: MdNode) => {
+    if (typeof node.value === "string") {
+      node.value = node.value.replaceAll("__TEMPLATE_VERSION__", templateVersion);
+    }
+    if (typeof node.url === "string") {
+      node.url = node.url.replaceAll("__TEMPLATE_VERSION__", templateVersion);
+    }
+    node.children?.forEach(replace);
+  };
+  return replace;
+}
 
 export default defineConfig({
   // Must match `basename` in react-router.config.ts: this prefixes asset URLs.
@@ -18,7 +41,7 @@ export default defineConfig({
       // build time, so no highlighter ships to the browser.
       enforce: "pre",
       ...mdx({
-        remarkPlugins: [remarkGfm],
+        remarkPlugins: [remarkGfm, remarkTemplateVersion],
         rehypePlugins: [
           rehypeSlug,
           [rehypeAutolinkHeadings, { behavior: "wrap" }],

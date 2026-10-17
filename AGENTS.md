@@ -4,7 +4,8 @@
 
 ## Docs-site rules
 
-- `app/components/ui/` is vendored from the template release in `TEMPLATE_VERSION`. Don't edit the template's components here: change them on `main`, release, bump `TEMPLATE_VERSION`, run `pnpm sync:template`. Components added only for the docs are listed in `docs_only` in `scripts/sync-template.sh`; add new ones there.
+- `app/components/ui/` is vendored from the template release in `TEMPLATE_VERSION`. Don't edit the template's components here: change them on `main`, release, bump `TEMPLATE_VERSION`, run `pnpm sync:template` (it also matches shared dependency versions). Components added only for the docs are listed in `docsOnly` in `scripts/sync-template.mjs`; add new ones there.
+- Never hard-code a template release in `app/content`: write `v__TEMPLATE_VERSION__`, which the MDX build fills in from `TEMPLATE_VERSION`. A test enforces this.
 - Page bodies are MDX in `app/content/`. `app/content/nav.ts` is the page list (sidebar, prev/next, edit links); add a page there and in `app/routes.ts`.
 - The site is served under `/quiet-on-set/`. Link with `<Link>` (or root-relative Markdown links, which MDX maps to `<Link>`), never a hard-coded `href="/..."`.
 - `pnpm build` runs `scripts/flatten-prerender.mjs` after React Router: it moves pages out of `build/client/quiet-on-set/` and writes `404.html`.
