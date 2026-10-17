@@ -44,6 +44,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+        {/* Cloudflare Web Analytics for the docs site. Not part of the template.
+            Production builds only: the beacon can't report from localhost. */}
+        {import.meta.env.PROD && (
+          <script
+            type="module"
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "6ba2d48c118643328bab2ace83a3cc4c"}'
+          />
+        )}
       </body>
     </html>
   );
