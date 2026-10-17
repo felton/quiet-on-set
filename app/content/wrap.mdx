@@ -17,6 +17,14 @@ Without a server, React Router builds plain files that any static host can serve
 - **SPA mode:** `pnpm build:spa` writes a single `build/client/index.html`, and every route renders in the browser. Preview it with `pnpm preview:spa`. The host has to send unknown URLs to `index.html`; on Netlify that's a `_redirects` file containing `/*  /index.html  200`.
 - **Pre-rendered:** set `ssr: false` and `prerender: true` in `react-router.config.ts` to get one HTML file per route, made at build time. That's better for first paint and search.
 
+Either way, `build/client` is the whole deployable site. There's no `index.html` source file in the repo: React Router generates it from the `Layout` in `app/root.tsx`, so the head tags, fonts and dark-mode script are defined once for every mode. The trade-offs of going serverless:
+
+- No server code runs. Loaders run at build time, and only on pre-rendered routes; in SPA mode only the root route can have one. Actions aren't allowed. Fetch data at runtime with `clientLoader` and `clientAction`.
+- Deep links need the host to send unknown URLs to the SPA entry: `index.html` in SPA mode, or `__spa-fallback.html` when pre-rendering with `/` itself pre-rendered.
+- Preview with `pnpm preview:spa`, a plain static server like your host. `pnpm start` also serves the build, but through the Node server, which isn't how it runs in production.
+
+The other route to a static app is React Router's _library mode_: a plain Vite app with `createBrowserRouter` and no React Router Vite plugin. That's a different project structure rather than a config change, so with this template, use one of the modes above.
+
 ## GitHub Pages
 
 This site is deployed exactly this way. It's pre-rendered and served from the project subpath, `https://felton.github.io/quiet-on-set/`.
@@ -69,10 +77,56 @@ This site is deployed exactly this way. It's pre-rendered and served from the pr
   <AlertTitle>Every route is a real file</AlertTitle>
   <AlertDescription>
     Deep links and hard refreshes load real HTML with a 200 status, so there's no need for a
-    `404.html` copy of the app. If you don't need pre-rendering, the README's SPA setup for Pages
-    works too.
+    `404.html` copy of the app. If you don't need pre-rendering, the SPA setup below works too.
   </AlertDescription>
 </Alert>
+
+### SPA mode on Pages
+
+Without pre-rendering, there's no flatten step, but Pages has no rewrite rules, so deep links need a workaround.
+
+1. **Config.** Set `ssr: false` and `basename: "/<repo>/"` in `react-router.config.ts`, and `base: "/<repo>/"` in `vite.config.ts`.
+2. **Deep links.** Pages serves `404.html` for any URL it can't find, so copy `index.html` there. Refreshes and shared links then load the app. Pages still sends those responses with a 404 status. That's fine for a personal site, but if search ranking matters, pre-render or use a host with real rewrites.
+3. **Workflow.** Add `.github/workflows/pages.yml` and set **Settings → Pages → Source** to **GitHub Actions**:
+
+```yaml
+name: Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: cp build/client/index.html build/client/404.html
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: build/client
+      - id: deployment
+        uses: actions/deploy-pages@v5
+```
 
 ## Other hosts
 

@@ -80,6 +80,29 @@ The dev server runs at `http://localhost:5173`.
 
 `pnpm check` is the same command CI runs. Run it before calling anything done.
 
+## Testing
+
+Tests sit next to the code they cover, as `*.test.ts(x)` files under `app/`. They run in jsdom with [Testing Library](https://testing-library.com/docs/react-testing-library/intro/). `app/routes/home.test.tsx` is the pattern to copy. It renders the route inside `createRoutesStub`, because route components use `<Link>` and `<Link>` needs a router:
+
+```tsx
+const Stub = createRoutesStub([{ path: "/", Component: Home }]);
+render(<Stub initialEntries={["/"]} />);
+expect((await screen.findByRole("heading", { level: 1 })).textContent).toBe("Places, everyone.");
+```
+
+Vitest has its own `vitest.config.ts`, because the React Router Vite plugin doesn't run under Vitest. `vitest.setup.ts` cleans up the DOM between tests.
+
+## Environment variables
+
+Copy `.env.example` to `.env` for local values. `.env` is gitignored and left out of Docker images, and the React Router CLI loads it for `dev`, `build` and `typegen`.
+
+| Variable | Default | Effect                                                                                                       |
+| -------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| `SPA`    | unset   | `true` builds a static single-page app (`ssr: false`) instead of the Node server build                       |
+| `VITE_*` | none    | Exposed to browser code as `import.meta.env.VITE_*`. They end up in the bundle, so never put secrets in them |
+
+You can set `SPA` three ways: `pnpm build:spa` for one build, `SPA=true pnpm build` (the same thing, by hand), or `SPA=true` in `.env` for every command, including `dev`. With it in `.env`, plain `pnpm build` produces the SPA build too.
+
 ## Make it yours
 
 1. Rename the project in `package.json` and update the brand in `app/welcome/welcome.tsx`.
@@ -88,7 +111,16 @@ The dev server runs at `http://localhost:5173`.
 4. Add routes and components ([Blocking](/docs/blocking) and [Props](/docs/props)).
 5. Replace the favicon. Edit `assets/favicon-tile.svg`, then run `pnpm favicon`.
 
-To use release-please in the new repo, turn on **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests**. If you don't want automated releases, delete `.github/workflows/release-please.yml`.
+## Releases
+
+Releases are automated with [release-please](https://github.com/googleapis/release-please), and the same workflow versions your project once you've reset it (step 2 above).
+
+- Write commit messages as [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`…). Only `feat:` and `fix:` commits, or a `!` breaking change, trigger a release, so squash-merge PRs with a conventional title.
+- On each push to `main`, release-please opens or updates a release PR. Merging it bumps `version` in `package.json` and the degit command in the README, updates `CHANGELOG.md`, tags `vX.Y.Z` and publishes a GitHub Release.
+- Settings are in `release-please-config.json`. `.release-please-manifest.json` records the last released version, and the release PR updates it.
+- The workflow uses the built-in `GITHUB_TOKEN`, so no secret is needed. Each repo does need **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests** turned on.
+
+If you don't want automated releases, delete `.github/workflows/release-please.yml`.
 
 ## With a coding agent
 
