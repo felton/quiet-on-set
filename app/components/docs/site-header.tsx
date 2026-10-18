@@ -12,7 +12,7 @@ import { templateVersion } from "~/lib/template-version";
 /** Top bar shared by the home page and the docs. `leading` holds the sidebar trigger on docs pages. */
 export function SiteHeader({ leading }: { leading?: ReactNode }) {
   return (
-    <header className="sticky top-0 z-10 border-b bg-background">
+    <header className="sticky top-0 z-20 border-b bg-background">
       <div className="flex h-14 items-center gap-2 px-4">
         {leading}
         <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight">
