@@ -10,8 +10,21 @@ export function SiteFooter() {
         className="underline underline-offset-2 hover:text-foreground"
       >
         quiet-on-set v{templateVersion}
+      </a>{" "}
+      by{" "}
+      <a
+        href="https://github.com/felton"
+        className="underline underline-offset-2 hover:text-foreground"
+      >
+        <img
+          src={`${import.meta.env.BASE_URL}images/felton.png`}
+          alt=""
+          width={96}
+          height={96}
+          className="mr-1 inline-block size-[1.5em] rounded-full align-middle"
+        />
+        @felton
       </a>
-      .
     </footer>
   );
 }

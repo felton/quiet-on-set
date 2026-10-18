@@ -2,6 +2,7 @@ import { Clapperboard } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 
+import { GitHubIcon } from "~/components/docs/github-icon";
 import { ThemeToggle } from "~/components/theme-toggle";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -24,8 +25,8 @@ export function SiteHeader({ leading }: { leading?: ReactNode }) {
           <Button variant="ghost" size="sm" render={<Link to="/docs/call-sheet" />}>
             Docs
           </Button>
-          <Button variant="ghost" size="sm" render={<a href={REPO_URL} />}>
-            GitHub
+          <Button variant="ghost" size="icon" render={<a href={REPO_URL} aria-label="GitHub" />}>
+            <GitHubIcon />
           </Button>
           <ThemeToggle />
         </nav>
