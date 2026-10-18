@@ -62,23 +62,17 @@ This copies one release with no git history. Other versions are on the [Releases
 
 For automated releases, turn on **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests**. Use [Conventional Commits](https://www.conventionalcommits.org/) and squash-merge PRs with a conventional title: `feat:` and `fix:` commits open a release PR, and merging it tags and publishes the release. If you don't want this, delete `.github/workflows/release-please.yml`.
 
-## Testing
-
-Tests sit next to the code as `*.test.ts(x)` files under `app/` and run in jsdom. `app/routes/home.test.tsx` is the pattern to copy: it renders the route inside `createRoutesStub`, because `<Link>` needs a router.
-
-## Environment variables
-
-Copy `.env.example` to `.env` (gitignored). `SPA=true` makes every command build a static SPA. `VITE_*` variables are exposed to browser code, so never put secrets in them.
-
 ## Going deeper
 
-| Page                                                                 | Covers                                              |
-| -------------------------------------------------------------------- | --------------------------------------------------- |
-| [Call Sheet](https://felton.github.io/quiet-on-set/docs/call-sheet/) | Getting started, scripts, agents                    |
-| [Blocking](https://felton.github.io/quiet-on-set/docs/blocking/)     | Project structure, routes, layouts, rendering modes |
-| [Props](https://felton.github.io/quiet-on-set/docs/props/)           | Every shipped component, live, with source          |
-| [Wardrobe](https://felton.github.io/quiet-on-set/docs/wardrobe/)     | Theme tokens, dark mode, fonts, hero, favicon       |
-| [Wrap](https://felton.github.io/quiet-on-set/docs/wrap/)             | Building, static hosting, GitHub Pages, FAQ         |
+| Page                                                                                                  | Covers                                              |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| [Call Sheet](https://felton.github.io/quiet-on-set/docs/call-sheet/)                                  | Getting started, scripts, agents                    |
+| [Testing](https://felton.github.io/quiet-on-set/docs/call-sheet/#testing)                             | Where tests go, the `createRoutesStub` pattern      |
+| [Environment variables](https://felton.github.io/quiet-on-set/docs/call-sheet/#environment-variables) | `.env`, `SPA`, `VITE_*` (never secrets)             |
+| [Blocking](https://felton.github.io/quiet-on-set/docs/blocking/)                                      | Project structure, routes, layouts, rendering modes |
+| [Props](https://felton.github.io/quiet-on-set/docs/props/)                                            | Every shipped component, live, with source          |
+| [Wardrobe](https://felton.github.io/quiet-on-set/docs/wardrobe/)                                      | Theme tokens, dark mode, fonts, hero, favicon       |
+| [Wrap](https://felton.github.io/quiet-on-set/docs/wrap/)                                              | Building, static hosting, GitHub Pages, FAQ         |
 
 ---
 
