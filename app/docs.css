@@ -1,5 +1,13 @@
 /* Docs-site styles on top of the template's app/app.css (which sync:template overwrites). */
 
+/* No rubber-band scrolling at the page edges. The header is sticky and the docs
+   sidebar is fixed, so an overscroll bounce (macOS, iOS) pulls the header down
+   past the sidebar instead of moving them together. */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
 /* Shiki, dual themes with defaultColor: false. The block background comes from bg-muted. */
 .shiki span {
   color: var(--shiki-light);
