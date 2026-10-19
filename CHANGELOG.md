@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/felton/quiet-on-set/compare/v1.0.1...v1.1.0) (2026-10-19)
+
+
+### Features
+
+* add site config and social tags ([#17](https://github.com/felton/quiet-on-set/issues/17)) ([317d061](https://github.com/felton/quiet-on-set/commit/317d061346252f86525c434166df7b0e9d031525))
+
 ## [1.0.1](https://github.com/felton/quiet-on-set/compare/v1.0.0...v1.0.1) (2026-10-16)
 
 
