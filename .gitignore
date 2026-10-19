@@ -37,3 +37,6 @@ vite.config.ts.timestamp-*
 
 # TypeScript cache
 *.tsbuildinfo
+# Editor swap files
+*.swp
+*.swo
