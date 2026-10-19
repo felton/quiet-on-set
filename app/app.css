@@ -6,12 +6,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
-  --font-sans:
-    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
-}
-
 /* Native UI (scrollbars, form controls) follows the active theme, not just the OS. */
 :root {
   color-scheme: light;

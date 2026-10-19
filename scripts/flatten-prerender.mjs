@@ -5,8 +5,10 @@
 import { cp, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
 
+import { site } from "../app/lib/site.ts";
+
 const client = path.resolve("build/client");
-const nested = path.join(client, "quiet-on-set");
+const nested = path.join(client, new URL(site.url).pathname);
 
 try {
   await stat(nested);

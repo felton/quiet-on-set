@@ -1,6 +1,8 @@
 import type { Config } from "@react-router/dev/config";
 
-// Static, pre-rendered build for GitHub Pages, served under /quiet-on-set/.
+import { site } from "./app/lib/site";
+
+// Static, pre-rendered build for GitHub Pages, served under the subpath of site.url.
 // Pre-rendered pages land in build/client/quiet-on-set/; scripts/flatten-prerender.mjs
 // moves them up next to the assets after the build.
 export default {
@@ -9,5 +11,6 @@ export default {
   async prerender({ getStaticPaths }) {
     return [...getStaticPaths(), "/404"];
   },
-  basename: "/quiet-on-set/",
+  // The subpath of site.url. Keep in step with `base` in vite.config.ts.
+  basename: site.url ? new URL(site.url).pathname.replace(/\/?$/, "/") : "/",
 } satisfies Config;

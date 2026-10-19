@@ -19,16 +19,18 @@ There's no file-system routing: a file in `app/routes/` does nothing until it's 
 1. Create the module, for example `app/routes/about.tsx`:
 
    ```tsx
-   import type { Route } from "./+types/about";
-
-   export function meta(_args: Route.MetaArgs) {
-     return [{ title: "About" }];
-   }
-
    export default function About() {
-     return <h1>About</h1>;
+     return (
+       <>
+         <title>About</title>
+         <meta name="description" content="Who we are." />
+         <h1>About</h1>
+       </>
+     );
    }
    ```
+
+   React moves the `<title>` and `<meta>` into `<head>`, during server rendering too. [Head tags](#head-tags) has the details.
 
 2. Register it in `app/routes.ts`:
 
@@ -47,7 +49,7 @@ There's no file-system routing: a file in `app/routes/` does nothing until it's 
    <NavigationMenuLink render={<Link to="/about" />}>About</NavigationMenuLink>
    ```
 
-The `./+types/about` import is generated. If your editor can't find it, run `pnpm typecheck`, which runs `react-router typegen` first.
+A route that exports a `loader`, `action` or `meta` types it with `import type { Route } from "./+types/about"`. That import is generated: if your editor can't find it, run `pnpm typecheck`, which runs `react-router typegen` first.
 
 ## Layouts
 
@@ -61,6 +63,28 @@ layout("routes/docs/layout.tsx", [
 ```
 
 `app/root.tsx` is the outermost layout. It holds the document shell (`<Meta />`, `<Links />`, the dark-mode script) and the app-wide error boundary.
+
+## Head tags
+
+Head tags come in two kinds, set in two places:
+
+- **Site-wide tags** (site name, social image, card type and the canonical link) are rendered by `app/root.tsx` from `app/lib/site.ts`. Every page gets them.
+- **Page tags** (title and description) go in the route component as React `<title>` and `<meta>` elements, like the About page above.
+
+`app/lib/site.ts` holds facts about the site and nothing else:
+
+```ts
+export const site = {
+  name: "Quiet on set",
+  description: "Places, everyone.",
+  url: "", // full public address, subpath included
+  image: "", // social card image in public/, ideally 1200x630
+};
+```
+
+- `url` is where the site will be public, such as `https://you.github.io/repo`, never `localhost`. Its path sets `basename` and Vite's `base`, so a subpath is configured in one place.
+- While `url` is empty, the site serves from `/` and leaves out `og:image`, `og:url` and the canonical link, because they need an absolute address. `pnpm build` prints a note. Dev, `pnpm start` and Docker work the same either way.
+- Why not the `meta` export? A child route's `meta` replaces its parent's, so site-wide tags set there would vanish from any page that sets its own. Since React 19, React Router recommends the elements instead. Keep `meta` for tags built from `loaderData`.
 
 ## Rendering modes
 
