@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/felton/quiet-on-set/compare/v1.1.0...v1.1.1) (2026-10-19)
+
+
+### Bug Fixes
+
+* leave canonical and og:url off error pages ([#19](https://github.com/felton/quiet-on-set/issues/19)) ([ad1b0fa](https://github.com/felton/quiet-on-set/commit/ad1b0facdcabcd0bbb9625fd9836d2e46c069bdc))
+
 ## [1.1.0](https://github.com/felton/quiet-on-set/compare/v1.0.1...v1.1.0) (2026-10-19)
 
 
