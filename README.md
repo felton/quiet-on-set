@@ -24,7 +24,7 @@ The setup work is already done (routing, styling, components, formatting, CI), s
 <!-- x-release-please-start-version -->
 
 ```bash
-npx degit felton/quiet-on-set#v1.0.1 my-app
+npx degit felton/quiet-on-set#v1.1.0 my-app
 cd my-app
 pnpm install
 pnpm dev
