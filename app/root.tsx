@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLocation,
+  useRouteError,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -22,9 +23,11 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   // Tags that need an absolute address are left out until site.url is set.
+  // Error pages (404s included) get no canonical address: they aren't a page to point to.
   const { pathname } = useLocation();
+  const error = useRouteError();
   const root = site.url && site.url.replace(/\/?$/, "/");
-  const pageUrl = root && new URL(pathname.slice(1), root).href;
+  const pageUrl = root && !error && new URL(pathname.slice(1), root).href;
   const imageUrl = root && site.image && new URL(site.image, root).href;
 
   return (
