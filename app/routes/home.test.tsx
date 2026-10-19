@@ -13,4 +13,16 @@ describe("home route", () => {
     const heading = await screen.findByRole("heading", { level: 1 });
     expect(heading.textContent).toBe("Places, everyone.");
   });
+
+  it("sets its page tags", async () => {
+    // React hoists <title> and <meta> from the component into document.head.
+    const Stub = createRoutesStub([{ path: "/", Component: Home }]);
+    render(<Stub initialEntries={["/"]} />);
+
+    await screen.findByRole("heading", { level: 1 });
+    expect(document.title).toBe("Quiet on set");
+    expect(document.head.querySelector('meta[name="description"]')?.getAttribute("content")).toBe(
+      "Places, everyone.",
+    );
+  });
 });
