@@ -12,6 +12,7 @@ The setup work is already done (routing, styling, components, formatting, CI), s
 - **Tailwind CSS v4** and **shadcn/ui** on the [Base UI](https://base-ui.com) variant
 - **TypeScript**, **oxfmt**, **oxlint**, **Vitest** and **Testing Library**
 - **Dark mode** with a Light / Dark / System menu, no provider needed
+- **Social cards and canonical links** from one `app/lib/site.ts`, which also sets the subpath
 - **`UnsplashPicture`**, a responsive `<picture>` with art-directed crops per breakpoint
 - **GitHub Actions** for CI, release-please and grouped Dependabot updates
 - **`AGENTS.md`** plus the official React Router and shadcn/ui agent skills
@@ -54,7 +55,7 @@ This copies one release with no git history. Other versions are on the [Releases
 
 ## Making it yours
 
-1. Rename the project in `package.json` and update the brand in `app/welcome/welcome.tsx`.
+1. Rename the project in `package.json`, set the name, description and public URL in `app/lib/site.ts`, and update the brand in `app/welcome/welcome.tsx`.
 2. Reset versioning: set `version` in `package.json` to your starting point (for example `0.1.0`) and delete `CHANGELOG.md`. Your copy has none of the template's tags, so release-please starts fresh.
 3. Swap the hero image and its photographer credit.
 4. Add routes in `app/routes/` (register them in `app/routes.ts`) and components with `pnpm dlx shadcn@latest add <component>`.

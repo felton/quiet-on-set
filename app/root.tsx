@@ -5,10 +5,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { site } from "./lib/site";
 import { themeScript } from "./lib/theme";
 
 export const links: Route.LinksFunction = () => [
@@ -16,25 +18,28 @@ export const links: Route.LinksFunction = () => [
   // SVG for modern browsers (follows the browser's light/dark setting), .ico as fallback.
   { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.svg`, type: "image/svg+xml" },
   { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.ico`, sizes: "32x32" },
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  // Tags that need an absolute address are left out until site.url is set.
+  const { pathname } = useLocation();
+  const root = site.url && site.url.replace(/\/?$/, "/");
+  const pageUrl = root && new URL(pathname.slice(1), root).href;
+  const imageUrl = root && site.image && new URL(site.image, root).href;
+
   return (
     // suppressHydrationWarning: themeScript adds the `dark` class before React hydrates.
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Site-wide tags. Page tags (<title>, description) go in each route component. */}
+        <meta property="og:site_name" content={site.name} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+        {imageUrl && <meta property="og:image" content={imageUrl} />}
+        {pageUrl && <meta property="og:url" content={pageUrl} />}
+        {pageUrl && <link rel="canonical" href={pageUrl} />}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <Meta />
         <Links />
