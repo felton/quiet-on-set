@@ -24,7 +24,7 @@ export function meta(_args: Route.MetaArgs) {
   ];
 }
 
-const scaffold = `npx degit felton/quiet-on-set#v${templateVersion} my-app`;
+const scaffold = "pnpm create quiet-on-set my-app";
 
 const features = [
   {
