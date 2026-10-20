@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/felton/quiet-on-set/compare/v1.1.1...v1.2.0) (2026-10-20)
+
+
+### Features
+
+* add pnpm make-it-yours to set up a new project ([#27](https://github.com/felton/quiet-on-set/issues/27)) ([7c5051f](https://github.com/felton/quiet-on-set/commit/7c5051f7d0d0a07098cd4950607f97715f511de3))
+
 ## [1.1.1](https://github.com/felton/quiet-on-set/compare/v1.1.0...v1.1.1) (2026-10-19)
 
 
