@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/felton/quiet-on-set/compare/v1.2.0...v1.2.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* add the MIT license and lead the Quick start with pnpm create ([#29](https://github.com/felton/quiet-on-set/issues/29)) ([6dd065f](https://github.com/felton/quiet-on-set/commit/6dd065f505d9d3b3cd1bdf1dc76a030c732922f1))
+
 ## [1.2.0](https://github.com/felton/quiet-on-set/compare/v1.1.1...v1.2.0) (2026-10-20)
 
 
