@@ -14,6 +14,7 @@ import UnsplashPicture from "~/components/image/unsplash-picture";
 import { Clapperboard } from "lucide-react";
 
 import { ThemeToggle } from "~/components/theme-toggle";
+import { site } from "~/lib/site";
 
 const resources = [
   {
@@ -39,7 +40,7 @@ export function Welcome() {
       <header className="border-b">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <Link to="/" className="font-semibold tracking-tight flex gap-2 items-center">
-            <Clapperboard strokeWidth={1.5} /> quiet on set
+            <Clapperboard strokeWidth={1.5} /> {site.name}
           </Link>
 
           <div className="flex items-center gap-1">

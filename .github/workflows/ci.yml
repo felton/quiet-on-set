@@ -46,6 +46,16 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: pnpm
+      - name: Make it yours
+        # The way a new project starts: the script runs before install, with
+        # a subpath URL so basename and base are exercised too.
+        working-directory: ${{ runner.temp }}/app
+        run: |
+          node scripts/make-it-yours.mjs --name "Test Site" --description "CI" --url https://example.com/sub --yes
+          test -f TEMPLATE_VERSION
+          test ! -e scripts/make-it-yours.mjs
+          test ! -e CHANGELOG.md
+          grep -q '"0.1.0"' .release-please-manifest.json
       - name: Install, check and build
         working-directory: ${{ runner.temp }}/app
         run: |

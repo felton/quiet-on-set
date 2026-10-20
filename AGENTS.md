@@ -83,10 +83,11 @@ Copy `.env.example` to `.env`. `SPA=true` builds a static single-page app instea
 
 ## Working from a brief
 
+- If `scripts/make-it-yours.mjs` exists, this is a fresh copy of the template: run `pnpm make-it-yours --name "…" --description "…" --yes` first (add `--url` if the brief gives a public address).
 - Data, auth and storage aren't included. Choose them to the brief's spec, using the React Router skill for loaders, actions, sessions and forms.
 - One check-in with the engineer is fine. If the brief leaves out both a data, auth or storage choice and a public address, ask about the data, auth or storage choice. `site.url` can stay empty.
 
 ## Commits and releases
 
 - Use [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`. release-please derives versions and the changelog from them.
-- Do not edit `CHANGELOG.md` or the `version` in `package.json` by hand. The one exception is setting up a new project from this template: reset `version` and delete the template's `CHANGELOG.md` (README, "Making it yours"). Also set `name` and `description` in `app/lib/site.ts`.
+- Do not edit `CHANGELOG.md` or the `version` in `package.json` by hand. The one exception is setting up a new project from this template, which `pnpm make-it-yours` does.

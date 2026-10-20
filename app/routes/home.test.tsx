@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { createRoutesStub } from "react-router";
 import { describe, expect, it } from "vitest";
 
+import { site } from "../lib/site";
 import Home from "./home";
 
 describe("home route", () => {
@@ -20,9 +21,9 @@ describe("home route", () => {
     render(<Stub initialEntries={["/"]} />);
 
     await screen.findByRole("heading", { level: 1 });
-    expect(document.title).toBe("Quiet on set");
+    expect(document.title).toBe(site.name);
     expect(document.head.querySelector('meta[name="description"]')?.getAttribute("content")).toBe(
-      "Places, everyone.",
+      site.description,
     );
   });
 });
