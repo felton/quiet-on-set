@@ -9,6 +9,8 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
+import { site } from "./app/lib/site.ts";
+
 const templateVersion = readFileSync("TEMPLATE_VERSION", "utf8").trim();
 
 type MdNode = { type: string; value?: string; url?: string; children?: MdNode[] };
@@ -32,8 +34,9 @@ function remarkTemplateVersion() {
 }
 
 export default defineConfig({
-  // Must match `basename` in react-router.config.ts: this prefixes asset URLs.
-  base: "/quiet-on-set/",
+  // The subpath of site.url, so asset URLs match where the site is served. Keep
+  // in step with `basename` in react-router.config.ts.
+  base: site.url ? new URL(site.url).pathname.replace(/\/?$/, "/") : "/",
   plugins: [
     tailwindcss(),
     {

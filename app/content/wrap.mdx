@@ -29,7 +29,12 @@ The other route to a static app is React Router's _library mode_: a plain Vite a
 
 This site is deployed exactly this way. It's pre-rendered and served from the project subpath, `https://felton.github.io/quiet-on-set/`.
 
-1. **Config.** Set the subpath in both files. `basename` sets the route paths, and Vite's `base` sets the asset URLs.
+1. **Config.** Set `site.url` in `app/lib/site.ts` to the full address, subpath included. Its path becomes `basename` (route paths) in `react-router.config.ts` and Vite's `base` (asset URLs) in `vite.config.ts`, so neither needs editing. Then switch on pre-rendering:
+
+   ```ts
+   // app/lib/site.ts
+   url: "https://felton.github.io/quiet-on-set",
+   ```
 
    ```ts
    // react-router.config.ts
@@ -39,19 +44,12 @@ This site is deployed exactly this way. It's pre-rendered and served from the pr
      async prerender({ getStaticPaths }) {
        return [...getStaticPaths(), "/404"];
      },
-     basename: "/quiet-on-set/",
+     // Already in the template: the path of site.url.
+     basename: site.url ? new URL(site.url).pathname.replace(/\/?$/, "/") : "/",
    } satisfies Config;
    ```
 
-   ```ts
-   // vite.config.ts
-   export default defineConfig({
-     base: "/quiet-on-set/",
-     // ...
-   });
-   ```
-
-2. **Flatten the output.** With a `basename`, React Router writes pre-rendered pages to `build/client/quiet-on-set/…`, but Pages serves `build/client` itself at `/quiet-on-set/`. A short post-build script moves the pages up next to the assets:
+2. **Flatten the output.** With a `basename`, React Router writes pre-rendered pages to `build/client/quiet-on-set/…`, but Pages serves `build/client` itself at `/quiet-on-set/`. A short post-build script reads the subpath from `site.url` and moves the pages up next to the assets:
 
    ```json
    "build": "react-router build && node scripts/flatten-prerender.mjs"
@@ -85,7 +83,7 @@ This site is deployed exactly this way. It's pre-rendered and served from the pr
 
 Without pre-rendering, there's no flatten step, but Pages has no rewrite rules, so deep links need a workaround.
 
-1. **Config.** Set `ssr: false` and `basename: "/<repo>/"` in `react-router.config.ts`, and `base: "/<repo>/"` in `vite.config.ts`.
+1. **Config.** Set `ssr: false` in `react-router.config.ts`, and `site.url` to `https://<user>.github.io/<repo>` in `app/lib/site.ts`. That sets `basename` and `base`.
 2. **Deep links.** Pages serves `404.html` for any URL it can't find, so copy `index.html` there. Refreshes and shared links then load the app. Pages still sends those responses with a 404 status. That's fine for a personal site, but if search ranking matters, pre-render or use a host with real rewrites.
 3. **Workflow.** Add `.github/workflows/pages.yml` and set **Settings → Pages → Source** to **GitHub Actions**:
 
@@ -130,7 +128,7 @@ jobs:
 
 ## Other hosts
 
-The pre-rendered or SPA `build/client` folder works on any static host (Netlify, Cloudflare Pages, S3, nginx). Deployed at the domain root, it needs no `basename` and no flatten step. For server rendering, deploy the default build to any Node host or as a container.
+The pre-rendered or SPA `build/client` folder works on any static host (Netlify, Cloudflare Pages, S3, nginx). Deployed at the domain root, `site.url` has no subpath, so there's no `basename` and no flatten step. For server rendering, deploy the default build to any Node host or as a container.
 
 ## Working with agents
 

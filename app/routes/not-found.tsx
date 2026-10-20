@@ -17,6 +17,9 @@ export function meta(_args: Route.MetaArgs) {
   return [{ title: "Not found · quiet on set" }, { name: "robots", content: "noindex" }];
 }
 
+// root.tsx leaves canonical and og:url off pages that set this.
+export const handle = { canonical: false };
+
 // Catch-all route, pre-rendered as /404 and shipped as 404.html. GitHub Pages
 // serves that file for any unknown URL, and because this route also matches
 // that URL in the browser, it hydrates without a mismatch.
