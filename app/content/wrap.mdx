@@ -135,6 +135,7 @@ The pre-rendered or SPA `build/client` folder works on any static host (Netlify,
 The template is set up for coding agents as well as people:
 
 - `AGENTS.md` lists the commands, the layout and the conventions. `CLAUDE.md` imports it.
+- `pnpm create quiet-on-set my-app --name "…" --description "…" --yes` scaffolds without questions, and `AGENTS.md` tells an agent that finds a fresh copy to run `pnpm make-it-yours`.
 - `.agents/skills/` holds the official React Router and shadcn/ui agent skills, symlinked into `.claude/skills/`.
 - `pnpm check` is the bar for done, and CI runs the same command.
 
@@ -155,8 +156,8 @@ The template is set up for coding agents as well as people:
   <AccordionItem value="docs">
     <AccordionTrigger>Will this docs site end up in my project?</AccordionTrigger>
     <AccordionContent>
-      No. It lives on a separate `docs` branch. degit, Use this template and `gh repo create
-      --template` only copy the default branch.
+      No. It lives on a separate `docs` branch. `pnpm create`, degit, Use this template and `gh repo
+      create --template` only copy the default branch or one of its releases.
     </AccordionContent>
   </AccordionItem>
 </Accordion>

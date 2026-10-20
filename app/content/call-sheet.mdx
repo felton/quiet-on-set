@@ -5,25 +5,74 @@ quiet-on-set is a starting point for new web projects: React Router in framework
 
 ## Scaffold a project
 
-Copy a pinned release with [degit](https://github.com/Rich-Harris/degit). It takes the files from that release without any git history, so your project starts with a clean repo.
+Run the create command with your package manager. It downloads the latest template release into `my-app`, then runs `make-it-yours` there, which asks for the site's name, description and public URL and sets the copy up as your project ([Make it yours](#make-it-yours) has the details).
 
-<Tabs defaultValue="npm" className="mt-4">
+<Tabs defaultValue="pnpm" className="mt-4">
   <TabsList>
-    <TabsTrigger value="npm">npm</TabsTrigger>
     <TabsTrigger value="pnpm">pnpm</TabsTrigger>
+    <TabsTrigger value="npm">npm</TabsTrigger>
     <TabsTrigger value="bun">bun</TabsTrigger>
   </TabsList>
-  <TabsContent value="npm">
+  <TabsContent value="pnpm">
 
 ```bash
-npx degit felton/quiet-on-set#v__TEMPLATE_VERSION__ my-app
+pnpm create quiet-on-set my-app
 ```
 
   </TabsContent>
+  <TabsContent value="npm">
+
+```bash
+npm create quiet-on-set@latest my-app
+```
+
+  </TabsContent>
+  <TabsContent value="bun">
+
+```bash
+bun create quiet-on-set my-app
+```
+
+  </TabsContent>
+</Tabs>
+
+Pass values as options to skip the questions. With `--yes`, anything not given takes its default, which is how agents and CI run it:
+
+```bash
+pnpm create quiet-on-set my-app --name "Bakery Co" --description "Fresh bread daily" --yes
+```
+
+| Option                 | Default            | Effect                                                |
+| ---------------------- | ------------------ | ----------------------------------------------------- |
+| `--template <tag>`     | the latest release | A release tag to pin, such as `v__TEMPLATE_VERSION__` |
+| `--name <name>`        | the directory name | Site name                                             |
+| `--description <text>` | empty              | One-line description                                  |
+| `--url <url>`          | empty              | Public address, including any subpath                 |
+| `-y`, `--yes`          |                    | Don't ask; use defaults for anything not given        |
+
+### Without the CLI
+
+[degit](https://github.com/Rich-Harris/degit) copies a pinned release without any git history. Run `pnpm make-it-yours` in the copy afterwards:
+
+<Tabs defaultValue="pnpm" className="mt-4">
+  <TabsList>
+    <TabsTrigger value="pnpm">pnpm</TabsTrigger>
+    <TabsTrigger value="npm">npm</TabsTrigger>
+    <TabsTrigger value="bun">bun</TabsTrigger>
+  </TabsList>
   <TabsContent value="pnpm">
 
 ```bash
 pnpm dlx degit felton/quiet-on-set#v__TEMPLATE_VERSION__ my-app
+cd my-app && pnpm make-it-yours
+```
+
+  </TabsContent>
+  <TabsContent value="npm">
+
+```bash
+npx degit felton/quiet-on-set#v__TEMPLATE_VERSION__ my-app
+cd my-app && pnpm make-it-yours
 ```
 
   </TabsContent>
@@ -31,6 +80,7 @@ pnpm dlx degit felton/quiet-on-set#v__TEMPLATE_VERSION__ my-app
 
 ```bash
 bunx degit felton/quiet-on-set#v__TEMPLATE_VERSION__ my-app
+cd my-app && pnpm make-it-yours
 ```
 
   </TabsContent>
@@ -38,7 +88,7 @@ bunx degit felton/quiet-on-set#v__TEMPLATE_VERSION__ my-app
 
 Leave off `#v__TEMPLATE_VERSION__` to get the latest `main`. Every version is listed on the [Releases](https://github.com/felton/quiet-on-set/releases) page.
 
-You can also click **Use this template** on GitHub, or do the same from the command line. Both copy the current `main`:
+You can also click **Use this template** on GitHub, or do the same from the command line. Both copy the current `main`, so run `pnpm make-it-yours` in the copy:
 
 ```bash
 gh repo create my-app --template felton/quiet-on-set --private --clone
@@ -57,9 +107,9 @@ The dev server runs at `http://localhost:5173`.
 <Alert>
   <AlertTitle>The project uses pnpm</AlertTitle>
   <AlertDescription>
-    Whichever tool ran degit, install with pnpm. The version is pinned in the `packageManager` field
-    of `package.json`, and CI installs from `pnpm-lock.yaml`. If you don't have pnpm, `corepack
-    enable` sets it up.
+    Whichever tool you scaffolded with, install with pnpm. The version is pinned in the
+    `packageManager` field of `package.json`, and CI installs from `pnpm-lock.yaml`. If you don't
+    have pnpm, `corepack enable` sets it up.
   </AlertDescription>
 </Alert>
 
@@ -105,11 +155,16 @@ You can set `SPA` three ways: `pnpm build:spa` for one build, `SPA=true pnpm bui
 
 ## Make it yours
 
-1. Rename the project in `package.json`, set the name, description and public URL in `app/lib/site.ts`, and update the brand in `app/welcome/welcome.tsx`.
-2. Reset versioning: set `version` in `package.json` to your starting point (for example `0.1.0`) and delete `CHANGELOG.md`. Your copy has none of the template's tags, so release-please starts fresh.
-3. Swap the hero image ([Wardrobe](/docs/wardrobe) has the details).
-4. Add routes and components ([Blocking](/docs/blocking) and [Props](/docs/props)).
-5. Replace the favicon. Edit `assets/favicon-tile.svg`, then run `pnpm favicon`.
+`pnpm create` does the first step for you. After degit or **Use this template**, run it yourself:
+
+1. Run `pnpm make-it-yours`. It needs no install first, and takes the same `--name`, `--description`, `--url` and `--yes` options. It:
+   - sets the name, description and public URL in `app/lib/site.ts`, and the package name in `package.json`
+   - resets versioning to `0.1.0` in `package.json` and `.release-please-manifest.json`, and deletes `CHANGELOG.md`, so release-please starts fresh
+   - records the template release in `TEMPLATE_VERSION`
+   - replaces the README, drops the setup notes from `AGENTS.md`, and deletes itself
+2. Swap the hero image ([Wardrobe](/docs/wardrobe) has the details).
+3. Add routes and components ([Blocking](/docs/blocking) and [Props](/docs/props)).
+4. Replace the favicon. Edit `assets/favicon-tile.svg`, then run `pnpm favicon`.
 
 ## Releases
 
@@ -124,4 +179,4 @@ If you don't want automated releases, delete `.github/workflows/release-please.y
 
 ## With a coding agent
 
-Give the agent the degit command and a brief for the site. `AGENTS.md` (which `CLAUDE.md` imports) tells it the commands, the layout and the conventions, and `.agents/skills/` has the official React Router and shadcn/ui skills. [Wrap](/docs/wrap#working-with-agents) has more.
+Give the agent a brief for the site and the create command with the values filled in: `pnpm create quiet-on-set my-app --name "…" --description "…" --yes`. If it copies the template another way, `AGENTS.md` tells it to run `pnpm make-it-yours` first. `AGENTS.md` (which `CLAUDE.md` imports) tells it the commands, the layout and the conventions, and `.agents/skills/` has the official React Router and shadcn/ui skills. [Wrap](/docs/wrap#working-with-agents) has more.
