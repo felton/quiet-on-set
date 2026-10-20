@@ -16,7 +16,8 @@
     "lint": "oxlint",
     "test": "vitest run",
     "check": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm test",
-    "favicon": "sh scripts/favicon.sh"
+    "favicon": "sh scripts/favicon.sh",
+    "make-it-yours": "node scripts/make-it-yours.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

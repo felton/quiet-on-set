@@ -26,6 +26,7 @@ The setup work is already done (routing, styling, components, formatting, CI), s
 ```bash
 npx degit felton/quiet-on-set#v1.1.1 my-app
 cd my-app
+pnpm make-it-yours
 pnpm install
 pnpm dev
 ```
@@ -34,7 +35,9 @@ pnpm dev
 
 This copies one release with no git history. Other versions are on the [Releases](../../releases) page. You can also click **Use this template**, or run `gh repo create my-app --template felton/quiet-on-set --private --clone`.
 
-**With a coding agent:** give it the degit command and a brief for the site. `AGENTS.md`, which `CLAUDE.md` imports, tells it the commands, layout and conventions.
+`pnpm make-it-yours` asks for the site's name, description and public URL (or takes `--name`, `--description`, `--url` and `--yes`), then sets up the copy as your project and deletes itself. See [Making it yours](#making-it-yours).
+
+**With a coding agent:** give it the degit command and a brief for the site. `AGENTS.md`, which `CLAUDE.md` imports, tells it to run `pnpm make-it-yours` first, plus the commands, layout and conventions.
 
 ## Scripts
 
@@ -55,11 +58,10 @@ This copies one release with no git history. Other versions are on the [Releases
 
 ## Making it yours
 
-1. Rename the project in `package.json`, set the name, description and public URL in `app/lib/site.ts`, and update the brand in `app/welcome/welcome.tsx`.
-2. Reset versioning: set `version` in `package.json` to your starting point (for example `0.1.0`) and delete `CHANGELOG.md`. Your copy has none of the template's tags, so release-please starts fresh.
-3. Swap the hero image and its photographer credit.
-4. Add routes in `app/routes/` (register them in `app/routes.ts`) and components with `pnpm dlx shadcn@latest add <component>`.
-5. Replace the favicon. Edit `assets/favicon-tile.svg`, then run `pnpm favicon`.
+1. Run `pnpm make-it-yours`. It sets the name, description and public URL in `app/lib/site.ts` and `package.json`, resets versioning to `0.1.0` (`package.json` and `.release-please-manifest.json`) so release-please starts fresh, records the template release in `TEMPLATE_VERSION`, replaces this README, deletes `CHANGELOG.md`, and removes itself.
+2. Swap the hero image and its photographer credit.
+3. Add routes in `app/routes/` (register them in `app/routes.ts`) and components with `pnpm dlx shadcn@latest add <component>`.
+4. Replace the favicon. Edit `assets/favicon-tile.svg`, then run `pnpm favicon`.
 
 For automated releases, turn on **Settings → Actions → General → Allow GitHub Actions to create and approve pull requests**. Use [Conventional Commits](https://www.conventionalcommits.org/) and squash-merge PRs with a conventional title: `feat:` and `fix:` commits open a release PR, and merging it tags and publishes the release. If you don't want this, delete `.github/workflows/release-please.yml`.
 
