@@ -6,6 +6,8 @@ import {
   Scripts,
   ScrollRestoration,
   useLocation,
+  useMatches,
+  useRouteError,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -23,9 +25,15 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   // Tags that need an absolute address are left out until site.url is set.
+  // Error pages (404s included) get no canonical address: they aren't a page to point to.
   const { pathname } = useLocation();
+  const error = useRouteError();
+  // Docs site only: the catch-all 404 route isn't an error, so it opts out with a handle.
+  const noCanonical = useMatches().some(
+    (match) => (match.handle as { canonical?: boolean } | undefined)?.canonical === false,
+  );
   const root = site.url && site.url.replace(/\/?$/, "/");
-  const pageUrl = root && new URL(pathname.slice(1), root).href;
+  const pageUrl = root && !error && !noCanonical && new URL(pathname.slice(1), root).href;
   const imageUrl = root && site.image && new URL(site.image, root).href;
 
   return (
