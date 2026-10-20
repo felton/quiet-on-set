@@ -1,15 +1,21 @@
 // Bring the docs site up to the template release in TEMPLATE_VERSION:
 //   1. re-copy the template's UI components, theme and Node version from the tag
-//   2. record which components that release ships (app/content/shipped-components.txt)
-//   3. match the version range of every dependency both projects use, and let
+//   2. merge the template's changes into files this site has customized
+//   3. record which components that release ships (app/content/shipped-components.txt)
+//   4. match the version range of every dependency both projects use, and let
 //      pnpm update the lockfile rather than merging main's
-// Run after bumping TEMPLATE_VERSION, review the diff, then commit.
+// Run on a clean tree after bumping TEMPLATE_VERSION, review the diff, then commit.
 // docs is an orphan branch, so this works from the tag by path, never by merging main.
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 
 const tag = `v${readFileSync("TEMPLATE_VERSION", "utf8").trim()}`;
 const ui = "app/components/ui";
+
+// Files this site has changed from the template. Instead of being re-copied,
+// they get the template's diff between the last synced release and this one,
+// applied as a three-way merge: conflicts show up as markers to resolve.
+const merged = ["AGENTS.md", "app/root.tsx", "react-router.config.ts", "vite.config.ts"];
 
 // Components the docs site adds on top of the template. Sync leaves them alone.
 const docsOnly = new Set([
@@ -45,14 +51,32 @@ git(
   ".nvmrc",
 );
 
-// 2. The Props page shows exactly these.
+// 2. The last synced release is the committed TEMPLATE_VERSION.
+const fromTag = `v${git("show", "HEAD:TEMPLATE_VERSION").trim()}`;
+let conflicts = false;
+if (fromTag !== tag) {
+  const patch = git("diff", fromTag, tag, "--", ...merged);
+  if (patch) {
+    try {
+      execFileSync("git", ["apply", "--3way"], {
+        input: patch,
+        stdio: ["pipe", "inherit", "inherit"],
+      });
+      console.log(`Merged ${fromTag}..${tag} into ${merged.join(", ")}.`);
+    } catch {
+      conflicts = true;
+    }
+  }
+}
+
+// 3. The Props page shows exactly these.
 const shipped = git("ls-tree", "--name-only", tag, `${ui}/`)
   .split("\n")
   .filter((f) => f.endsWith(".tsx"))
   .map((f) => f.slice(ui.length + 1, -".tsx".length));
 writeFileSync("app/content/shipped-components.txt", shipped.join("\n") + "\n");
 
-// 3. Dependencies. Copy the template's version range for every package both
+// 4. Dependencies. Copy the template's version range for every package both
 // projects use, then let `pnpm install` update the lockfile (no lockfile merging).
 // Docs-only packages (MDX, Shiki, rehype…) aren't in the template, so they're
 // never touched, and each package stays in its section on this branch.
@@ -88,6 +112,12 @@ const stale = readdirSync(ui)
   .filter((name) => !shipped.includes(name) && !docsOnly.has(name));
 
 console.log(`Synced ${ui}, theme and dependencies from ${tag}.`);
+if (conflicts) {
+  console.error(
+    `Merging ${fromTag}..${tag} left conflicts: resolve the markers (git diff --name-only --diff-filter=U), then git add.`,
+  );
+  process.exitCode = 1;
+}
 if (stale.length) {
   console.error(
     `Not in ${tag} and not docs-only (delete, or add to docsOnly):\n  ${stale.map((n) => `${ui}/${n}.tsx`).join("\n  ")}`,
