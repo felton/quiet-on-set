@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "homepage": "https://felton.github.io/quiet-on-set/",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "react-router build",

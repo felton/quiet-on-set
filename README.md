@@ -21,23 +21,30 @@ The setup work is already done (routing, styling, components, formatting, CI), s
 
 ## Quick start
 
+```bash
+pnpm create quiet-on-set my-app
+cd my-app
+pnpm install
+pnpm dev
+```
+
+`pnpm create` downloads the latest release and runs `pnpm make-it-yours` in it. That asks for the site's name, description and public URL (or takes `--name`, `--description`, `--url` and `--yes`) and sets the copy up as your project. `npm create quiet-on-set@latest my-app` works too. [create-quiet-on-set](https://github.com/felton/create-quiet-on-set) lists every option.
+
+**A pinned release, without the CLI:**
+
 <!-- x-release-please-start-version -->
 
 ```bash
 npx degit felton/quiet-on-set#v1.2.0 my-app
 cd my-app
 pnpm make-it-yours
-pnpm install
-pnpm dev
 ```
 
 <!-- x-release-please-end -->
 
-This copies one release with no git history. Other versions are on the [Releases](../../releases) page. You can also click **Use this template**, or run `gh repo create my-app --template felton/quiet-on-set --private --clone`.
+degit copies one release with no git history. Other versions are on the [Releases](../../releases) page. You can also click **Use this template**, or run `gh repo create my-app --template felton/quiet-on-set --private --clone`, then run `pnpm make-it-yours` in the copy. See [Making it yours](#making-it-yours).
 
-`pnpm make-it-yours` asks for the site's name, description and public URL (or takes `--name`, `--description`, `--url` and `--yes`), then sets up the copy as your project and deletes itself. See [Making it yours](#making-it-yours).
-
-**With a coding agent:** give it the degit command and a brief for the site. `AGENTS.md`, which `CLAUDE.md` imports, tells it to run `pnpm make-it-yours` first, plus the commands, layout and conventions.
+**With a coding agent:** give it a brief and the command, with the values filled in: `pnpm create quiet-on-set my-app --name "…" --description "…" --yes`. `AGENTS.md`, which `CLAUDE.md` imports, tells it the commands, layout and conventions, and to run `pnpm make-it-yours` if it finds a fresh copy.
 
 ## Scripts
 
@@ -76,6 +83,10 @@ For automated releases, turn on **Settings → Actions → General → Allow Git
 | [Props](https://felton.github.io/quiet-on-set/docs/props/)                                            | Every shipped component, live, with source          |
 | [Wardrobe](https://felton.github.io/quiet-on-set/docs/wardrobe/)                                      | Theme tokens, dark mode, fonts, hero, favicon       |
 | [Wrap](https://felton.github.io/quiet-on-set/docs/wrap/)                                              | Building, static hosting, GitHub Pages, FAQ         |
+
+## License
+
+[MIT](LICENSE)
 
 ---
 
