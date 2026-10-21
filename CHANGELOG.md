@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/felton/quiet-on-set/compare/v1.2.1...v1.2.2) (2026-10-21)
+
+
+### Bug Fixes
+
+* install shadcn as a dev dependency ([#32](https://github.com/felton/quiet-on-set/issues/32)) ([1b2e416](https://github.com/felton/quiet-on-set/commit/1b2e416ad901ada47763cb61b3d341a74f651b39))
+
 ## [1.2.1](https://github.com/felton/quiet-on-set/compare/v1.2.0...v1.2.1) (2026-10-20)
 
 
