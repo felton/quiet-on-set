@@ -35,7 +35,7 @@ pnpm dev
 <!-- x-release-please-start-version -->
 
 ```bash
-npx degit felton/quiet-on-set#v1.2.1 my-app
+npx degit felton/quiet-on-set#v1.2.2 my-app
 cd my-app
 pnpm make-it-yours
 ```
